@@ -3,8 +3,10 @@ import { useEffect, useMemo, useState } from "react";
 import { SceneManagement } from "../classes/scene-management";
 import { SceneRunner, SceneRunnerPublicProps } from "./SceneRunner";
 
+type SceneClasses = ConstructorParameters<typeof SceneManagement>[0];
+
 type WorldViewProps = SceneRunnerPublicProps & {
-  list: ConstructorParameters<typeof SceneManagement>[0];
+  list: SceneClasses;
 };
 
 export function ScenesProcess({ list, ...props }: WorldViewProps) {

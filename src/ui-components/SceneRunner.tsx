@@ -9,7 +9,6 @@ import { Sketch } from "./Sketch";
 
 import { Scene } from "../classes/scene";
 import { Camera } from "../classes/camera";
-import { tick } from "../utils";
 
 export type SceneRunnerPublicProps = {
   width: number;
@@ -30,13 +29,7 @@ export function SceneRunner({
   assetsLoader: AssetsLoader,
 }: SceneRunnerProps) {
   useEffect(() => {
-    (async function () {
-      if (assetsDelay != null) {
-        // assetsDelay = 0, will wait forever
-        await tick(assetsDelay || undefined);
-      }
-      current.loadAssets();
-    })();
+    current.loadAssets(assetsDelay);
   }, [current, assetsDelay]);
 
   const setup = function (camera: Camera) {

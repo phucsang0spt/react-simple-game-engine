@@ -6,6 +6,7 @@ import { Camera } from "./camera";
 import { LogicComponent } from "./logic-component";
 import { SceneManagement } from "./scene-management";
 import { WorldManagement } from "./world-management";
+import { tick } from "../utils";
 
 type LoadAssetsListener = (loadedAssets: boolean) => void;
 
@@ -14,7 +15,7 @@ export abstract class Scene<UIP = any> {
   private worldManagement!: WorldManagement;
   private _loadedAssets!: boolean;
   private loadAssetsListener!: LoadAssetsListener;
-
+  private assetsDelay: number = 0;
   public tag: string;
   public manager!: SceneManagement;
   public readonly sessionId: string = `${Math.random()}-${new Date().getTime()}`;
@@ -60,7 +61,13 @@ export abstract class Scene<UIP = any> {
     this.manager.gotoScene(tag);
   }
 
-  async loadAssets() {
+  async loadAssets(delay?: number) {
+    if (delay != null) {
+      this.assetsDelay = delay;
+    }
+    // if delay less than 0, it will wait forever
+    await tick(this.assetsDelay < 0 ? undefined : this.assetsDelay);
+
     this.setLoadAssetStatus(false);
     await this.onLoadAssets().catch((err) => {
       console.warn("Load assets fail", err.toString());
