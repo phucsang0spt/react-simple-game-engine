@@ -26,7 +26,7 @@ export abstract class Scene<UIP = any> {
     this.tag = (this as any).constructor.tag;
     this.ui = (this as any).constructor.ui;
     this._loadedAssets = false;
-    this.onActive();
+    this.onBorn();
   }
 
   get UI() {
@@ -38,7 +38,7 @@ export abstract class Scene<UIP = any> {
     return this.getUIProps();
   }
 
-  protected onActive() {}
+  protected onBorn() {}
 
   protected getUIProps() {
     return {} as UIP;
@@ -98,6 +98,7 @@ export abstract class Scene<UIP = any> {
     this.onUpdate();
     this.worldManagement.update();
 
+    Renderer.background(41, 41, 41);
     this.onDraw();
     this.worldManagement.draw();
   }

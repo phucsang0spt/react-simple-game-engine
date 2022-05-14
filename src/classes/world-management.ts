@@ -66,7 +66,6 @@ export class WorldManagement {
   }
 
   draw() {
-    Renderer.background(41, 41, 41);
     for (const entity of this.entities) {
       entity.draw();
     }

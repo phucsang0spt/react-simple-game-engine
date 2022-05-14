@@ -1,5 +1,8 @@
 import { Entity } from "./classes/entities/entity";
 import { Sprite } from "./classes/sprites/sprite";
+import type p5 from "p5";
+
+export type P5 = p5;
 
 export type Sound = HTMLAudioElement;
 export type Avatar = ReturnType<P5["loadImage"]>;
@@ -9,8 +12,6 @@ export type EntityPrepare<E extends Entity> = EntityInitial<E>;
 export type MasterBody = Matter.Body & {
   entity: Entity;
 };
-
-export type P5 = import("p5");
 
 export type CreateBodyDefine = {
   transform?: { x?: number; y?: number };
