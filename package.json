@@ -1,0 +1,44 @@
+{
+  "name": "react-simple-game-engine",
+  "version": "0.0.5",
+  "description": "",
+  "main": "lib/index.js",
+  "types": "lib",
+  "repository": "https://github.com/phucsang0spt/react-simple-game-engine",
+  "dependencies": {
+    "matter-js": "^0.18.0",
+    "p5": "^1.4.1",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "scripts": {
+    "build": "rm -rf lib && tsc -p .",
+    "publish": "npm publish"
+  },
+  "files": [
+    "/lib"
+  ],
+  "keywords": [
+    "game engine",
+    "matter.js game",
+    "p5.js game",
+    "matter js game",
+    "p5 js game",
+    "js game",
+    "canvas game",
+    "react game",
+    "react game engine",
+    "react simple game engine",
+    "reactjs game",
+    "reactjs game engine",
+    "reactjs simple game engine"
+  ],
+  "devDependencies": {
+    "typescript": "^4.4.2",
+    "@types/matter-js": "^0.17.7",
+    "@types/node": "^16.7.13",
+    "@types/p5": "^1.4.2",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0"
+  }
+}
