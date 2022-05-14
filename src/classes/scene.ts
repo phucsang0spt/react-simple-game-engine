@@ -95,10 +95,10 @@ export abstract class Scene<UIP = any> {
   protected onUpdate() {}
 
   action() {
-    this.worldManagement.update();
     this.onUpdate();
+    this.worldManagement.update();
 
-    this.worldManagement.draw();
     this.onDraw();
+    this.worldManagement.draw();
   }
 }
