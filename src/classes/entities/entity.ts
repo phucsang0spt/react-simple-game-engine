@@ -120,4 +120,6 @@ export abstract class Entity {
   abstract onSpriteWidthHeightBinding(): { width: number; height: number };
 
   onCollision(target: Entity) {}
+  onCollisionEnd(target: Entity) {}
+  onCollisionActive(target: Entity) {}
 }

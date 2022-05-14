@@ -18,6 +18,28 @@ export class WorldManagement {
         bodyB.entity.onCollision(bodyA.entity);
       }
     });
+    Events.on(this.engine, "collisionEnd", (event) => {
+      const pairs = event.pairs;
+      for (const pair of pairs) {
+        const { bodyA, bodyB } = pair as any as {
+          bodyA: MasterBody;
+          bodyB: MasterBody;
+        };
+        bodyA.entity.onCollisionEnd(bodyB.entity);
+        bodyB.entity.onCollisionEnd(bodyA.entity);
+      }
+    });
+    Events.on(this.engine, "collisionActive", (event) => {
+      const pairs = event.pairs;
+      for (const pair of pairs) {
+        const { bodyA, bodyB } = pair as any as {
+          bodyA: MasterBody;
+          bodyB: MasterBody;
+        };
+        bodyA.entity.onCollisionActive(bodyB.entity);
+        bodyB.entity.onCollisionActive(bodyA.entity);
+      }
+    });
   }
 
   destructor() {
