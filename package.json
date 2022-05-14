@@ -1,6 +1,6 @@
 {
   "name": "react-simple-game-engine",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "",
   "main": "lib/index.js",
   "types": "lib",
@@ -8,8 +8,7 @@
   "dependencies": {
     "matter-js": "^0.18.0",
     "p5": "^1.4.1",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react": "^18.0.0"
   },
   "scripts": {
     "build": "rm -rf lib && tsc -p .",
