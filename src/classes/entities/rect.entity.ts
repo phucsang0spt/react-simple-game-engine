@@ -1,4 +1,5 @@
 import { Bodies, Body } from "matter-js";
+import { CreateBodyDefine, EntityInitial } from "../../export-types";
 import { Entity } from "./entity";
 
 export class RectEntity extends Entity {

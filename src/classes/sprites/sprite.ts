@@ -7,7 +7,7 @@ type GetInitialParams<S extends { sprite?: any } = any> = {
   animation?: LogicComponent<AnimationSprite>;
 };
 
-export abstract class Sprite<SpriteType> {
+export abstract class Sprite<SpriteType = any> {
   public sprite!: SpriteType;
   private _entity!: Entity;
   private _width!: number;

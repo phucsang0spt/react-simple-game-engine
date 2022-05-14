@@ -1,4 +1,5 @@
 import { Body, Bodies } from "matter-js";
+import { CreateBodyDefine, EntityInitial } from "../../export-types";
 import { Entity } from "./entity";
 
 export class CircleEntity extends Entity {

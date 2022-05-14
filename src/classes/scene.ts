@@ -1,5 +1,7 @@
 import { ComponentType } from "react";
 
+import { Entity } from "./entities/entity";
+
 import { Camera } from "./camera";
 import { LogicComponent } from "./logic-component";
 import { SceneManagement } from "./scene-management";
@@ -72,7 +74,7 @@ export abstract class Scene<UIP = any> {
     this.worldManagement = new WorldManagement();
     const components = this.getComponents();
     for (const component of components) {
-      const entity: IEntity = component.output() as any;
+      const entity: Entity = component.output() as any;
       entity.camera = camera;
       this.worldManagement.addEntity(entity);
     }

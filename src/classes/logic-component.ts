@@ -1,4 +1,7 @@
-export class LogicComponent<C extends { initial: any } = IEntity> {
+import { Configable } from "../export-types";
+import { Entity } from "./entities/entity";
+
+export class LogicComponent<C extends { initial: any } = Entity> {
   private instance: C;
   constructor(configale: Configable<C>) {
     const [Class, params] = Array.isArray(configale) ? configale : [configale];

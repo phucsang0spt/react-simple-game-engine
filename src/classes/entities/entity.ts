@@ -1,13 +1,22 @@
 import Matter from "matter-js";
+
 import { Camera } from "../camera";
-import { ColorSprite } from "../sprites/color.sprite";
 import { WorldManagement } from "../world-management";
 
-import { EntityPrepare, MasterBody, Sound } from "../../export-types";
+import { Sprite } from "../sprites/sprite";
+import { ColorSprite } from "../sprites/color.sprite";
+
+import {
+  CreateBodyDefine,
+  EntityInitial,
+  EntityPrepare,
+  MasterBody,
+  Sound,
+} from "../../export-types";
 
 export abstract class Entity {
   private _body!: MasterBody;
-  private _sprite!: ISprite;
+  private _sprite!: Sprite;
   private readonly id: string = `${Math.random()}-${new Date().getTime()}`;
 
   public readonly tag!: string;
@@ -20,7 +29,7 @@ export abstract class Entity {
     this.tag = (this as any).constructor.tag;
   }
 
-  set sprite(sprite: ISprite) {
+  set sprite(sprite: Sprite) {
     this._sprite = sprite;
     this._sprite.entity = this;
   }

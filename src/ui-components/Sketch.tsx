@@ -1,6 +1,8 @@
 import p5 from "p5";
 import { useEffect, useRef } from "react";
+
 import { Camera } from "../classes/camera";
+import { P5 } from "../export-types";
 
 type SketchProps = {
   onSetup: (camera: Camera) => void;
