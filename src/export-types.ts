@@ -1,6 +1,8 @@
 import { Entity } from "./classes/entities/entity";
 import { Sprite } from "./classes/sprites/sprite";
+
 import type p5 from "p5";
+import type { Body, IChamferableBodyDefinition } from "matter-js";
 
 export type P5 = p5;
 
@@ -9,13 +11,13 @@ export type Avatar = ReturnType<P5["loadImage"]>;
 export type Color = [number, number, number, number?];
 
 export type EntityPrepare<E extends Entity> = EntityInitial<E>;
-export type MasterBody = Matter.Body & {
+export type MasterBody = Body & {
   entity: Entity;
 };
 
 export type CreateBodyDefine = {
   transform?: { x?: number; y?: number };
-  bodyOptions?: Matter.IChamferableBodyDefinition;
+  bodyOptions?: IChamferableBodyDefinition;
 };
 
 export type EntityInitial<E extends Entity> = {
