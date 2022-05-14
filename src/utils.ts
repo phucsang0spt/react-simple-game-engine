@@ -34,3 +34,13 @@ export async function createAssetSound(src: string): Promise<Sound> {
     media.src = src;
   });
 }
+
+export async function tick(delay?: number) {
+  return new Promise((res) => {
+    if (delay != null) {
+      setTimeout(res, delay);
+    } else {
+      // wait forever
+    }
+  });
+}

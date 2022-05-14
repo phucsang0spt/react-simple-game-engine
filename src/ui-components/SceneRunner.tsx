@@ -9,11 +9,13 @@ import { Sketch } from "./Sketch";
 
 import { Scene } from "../classes/scene";
 import { Camera } from "../classes/camera";
+import { tick } from "../utils";
 
 export type SceneRunnerPublicProps = {
   width: number;
   height: number;
   assetsLoader?: ReactNode | ComponentType;
+  assetsDelay?: number; //ms
 };
 
 type SceneRunnerProps = SceneRunnerPublicProps & {
@@ -21,14 +23,21 @@ type SceneRunnerProps = SceneRunnerPublicProps & {
 };
 
 export function SceneRunner({
+  assetsDelay,
   current,
   width,
   height,
   assetsLoader: AssetsLoader,
 }: SceneRunnerProps) {
   useEffect(() => {
-    current.loadAssets();
-  }, [current]);
+    (async function () {
+      if (assetsDelay != null) {
+        // assetsDelay = 0, will wait forever
+        await tick(assetsDelay || undefined);
+      }
+      current.loadAssets();
+    })();
+  }, [current, assetsDelay]);
 
   const setup = function (camera: Camera) {
     current.bootstrap(camera);
