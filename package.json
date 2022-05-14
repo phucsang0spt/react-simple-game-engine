@@ -1,6 +1,6 @@
 {
   "name": "react-simple-game-engine",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "",
   "main": "lib/index.js",
   "types": "lib",
@@ -11,8 +11,7 @@
     "react": "^18.0.0"
   },
   "scripts": {
-    "build": "rm -rf lib && tsc -p .",
-    "publish": "npm publish"
+    "build": "rm -rf lib && tsc -p ."
   },
   "files": [
     "/lib"

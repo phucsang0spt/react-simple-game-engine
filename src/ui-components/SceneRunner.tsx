@@ -1,16 +1,31 @@
-import { useEffect } from "react";
+import {
+  ComponentType,
+  ReactElement,
+  ReactNode,
+  useEffect,
+  useMemo,
+} from "react";
 import { Sketch } from "./Sketch";
 
 import { Scene } from "../classes/scene";
 import { Camera } from "../classes/camera";
 
-type SceneRunnerProps = {
-  current: Scene;
+export type SceneRunnerPublicProps = {
   width: number;
   height: number;
+  assetsLoader?: ReactNode | ComponentType;
 };
 
-export function SceneRunner({ current, width, height }: SceneRunnerProps) {
+type SceneRunnerProps = SceneRunnerPublicProps & {
+  current: Scene;
+};
+
+export function SceneRunner({
+  current,
+  width,
+  height,
+  assetsLoader: AssetsLoader,
+}: SceneRunnerProps) {
   useEffect(() => {
     current.loadAssets();
   }, [current]);
@@ -22,6 +37,13 @@ export function SceneRunner({ current, width, height }: SceneRunnerProps) {
   const draw = function () {
     current.action();
   };
+
+  const assetsLoader: ReactElement = useMemo(() => {
+    if (typeof AssetsLoader === "function") {
+      return <AssetsLoader />;
+    }
+    return (AssetsLoader ?? <div>Assets loading...</div>) as any;
+  }, [AssetsLoader]);
 
   return current.loadedAssets ? (
     <div style={{ width, height, position: "relative" }}>
@@ -41,6 +63,6 @@ export function SceneRunner({ current, width, height }: SceneRunnerProps) {
       </div>
     </div>
   ) : (
-    <div>Assets loading...</div>
+    assetsLoader
   );
 }

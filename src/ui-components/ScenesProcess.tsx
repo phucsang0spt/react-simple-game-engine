@@ -1,15 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { SceneManagement } from "../classes/scene-management";
-import { SceneRunner } from "./SceneRunner";
+import { SceneRunner, SceneRunnerPublicProps } from "./SceneRunner";
 
-type WorldViewProps = {
+type WorldViewProps = SceneRunnerPublicProps & {
   list: ConstructorParameters<typeof SceneManagement>[0];
-  width: number;
-  height: number;
 };
 
-export function ScenesProcess({ list, width, height }: WorldViewProps) {
+export function ScenesProcess({ list, ...props }: WorldViewProps) {
   const sceneManagement = useMemo(() => {
     return new SceneManagement(list);
   }, [list]);
@@ -36,8 +34,7 @@ export function ScenesProcess({ list, width, height }: WorldViewProps) {
     <SceneRunner
       key={currentScene.sessionId}
       current={currentScene}
-      width={width}
-      height={height}
+      {...props}
     />
   );
 }
