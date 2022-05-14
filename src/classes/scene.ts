@@ -15,7 +15,8 @@ export abstract class Scene<UIP = any> {
   private worldManagement!: WorldManagement;
   private _loadedAssets!: boolean;
   private loadAssetsListener!: LoadAssetsListener;
-  private assetsDelay: number = 0;
+
+  public assetsDelay: number = 0;
   public tag: string;
   public manager!: SceneManagement;
   public readonly sessionId: string = `${Math.random()}-${new Date().getTime()}`;
