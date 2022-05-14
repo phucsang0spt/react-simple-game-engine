@@ -25,6 +25,7 @@ export abstract class Scene<UIP = any> {
     this.tag = (this as any).constructor.tag;
     this.ui = (this as any).constructor.ui;
     this._loadedAssets = false;
+    this.onActive();
   }
 
   get UI() {
@@ -35,6 +36,8 @@ export abstract class Scene<UIP = any> {
   get UIProps() {
     return this.getUIProps();
   }
+
+  protected onActive() {}
 
   protected getUIProps() {
     return {} as UIP;
