@@ -80,8 +80,14 @@ export abstract class Scene<UIP = any> {
     }
   }
 
+  protected onDraw() {}
+  protected onUpdate() {}
+
   action() {
     this.worldManagement.update();
+    this.onUpdate();
+
     this.worldManagement.draw();
+    this.onDraw();
   }
 }
