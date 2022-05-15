@@ -2,7 +2,7 @@ import { AnimationSprite } from "../animations/animation";
 import { Entity } from "../entities/entity";
 import { LogicComponent } from "../logic-component";
 
-type GetInitialParams<S extends { sprite?: any } = any> = {
+export type GetInitialParams<S extends { sprite?: any } = any> = {
   sprite?: S["sprite"];
   animation?: LogicComponent<AnimationSprite>;
 };

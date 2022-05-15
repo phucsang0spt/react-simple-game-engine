@@ -44,3 +44,14 @@ export async function tick(delay?: number) {
     }
   });
 }
+
+export function copyProperties(
+  source: Record<string, any>,
+  target: Record<string, any>
+) {
+  for (const key in target) {
+    if (target[key] !== undefined) {
+      source[key] = target[key];
+    }
+  }
+}
