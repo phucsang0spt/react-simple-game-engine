@@ -23,3 +23,5 @@ export { SceneUI } from "./decorators/scene-ui.decor";
 export { ScenesProcess } from "./ui-components/ScenesProcess";
 
 export * from "./export-types";
+
+export { default as Matter } from "matter-js";
