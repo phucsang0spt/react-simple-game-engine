@@ -1,14 +1,22 @@
 {
   "name": "react-simple-game-engine",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "",
   "main": "lib/index.js",
   "types": "lib",
   "repository": "https://github.com/phucsang0spt/react-simple-game-engine",
   "dependencies": {
+    "@types/matter-js": "^0.17.7",
+    "@types/p5": "^1.4.2",
     "matter-js": "^0.18.0",
     "p5": "^1.4.1",
     "react": "^18.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.4.2",
+    "@types/node": "^16.7.13",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0"
   },
   "scripts": {
     "build": "rm -rf lib && tsc -p ."
@@ -30,13 +38,5 @@
     "reactjs game",
     "reactjs game engine",
     "reactjs simple game engine"
-  ],
-  "devDependencies": {
-    "typescript": "^4.4.2",
-    "@types/matter-js": "^0.17.7",
-    "@types/node": "^16.7.13",
-    "@types/p5": "^1.4.2",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0"
-  }
+  ]
 }
