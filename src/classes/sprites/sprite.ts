@@ -1,26 +1,29 @@
+import { Avatar, Color } from "../../export-types";
 import { AnimationSprite } from "../animations/animation";
 import { Entity } from "../entities/entity";
 import { LogicComponent } from "../logic-component";
 
-export type GetInitialParams<S extends { sprite?: any } = any> = {
-  sprite?: S["sprite"];
-  animation?: LogicComponent<AnimationSprite>;
+export type SourceType = Avatar | Color | undefined | null;
+
+export type GetInitialParams<S extends Sprite<any> = any> = {
+  source?: S["source"];
+  animation?: LogicComponent<AnimationSprite<S>>;
 };
 
-export abstract class Sprite<SpriteType = any> {
-  public sprite!: SpriteType;
+export abstract class Sprite<SpriteType extends SourceType> {
+  public source!: SpriteType;
   private _entity!: Entity;
   private _width!: number;
   private _height!: number;
 
-  private _animation: AnimationSprite | undefined;
+  private _animation: AnimationSprite<this> | undefined;
 
-  set animation(ani: AnimationSprite) {
+  set animation(ani: AnimationSprite<this>) {
     this._animation = ani;
-    this._animation.source = this;
+    this._animation.sprite = this;
   }
 
-  get animation(): AnimationSprite {
+  get animation(): AnimationSprite<this> {
     return this._animation as any;
   }
 

@@ -1,8 +1,12 @@
 import { Body, Bodies } from "matter-js";
+
 import { CreateBodyDefine, EntityInitial } from "../../export-types";
+import { Sprite } from "../sprites/sprite";
 import { Entity } from "./entity";
 
-export class CircleEntity extends Entity {
+export class CircleEntity<
+  SpriteType extends Sprite<any> = any
+> extends Entity<SpriteType> {
   public radius!: number;
 
   onSpriteWidthHeightBinding(): { width: number; height: number } {

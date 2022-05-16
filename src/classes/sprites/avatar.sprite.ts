@@ -29,13 +29,13 @@ export class AvatarSprite extends Sprite<Avatar | undefined | null> {
   }
 
   onDraw() {
-    if (this.sprite) {
+    if (this.source) {
       if (this.animation) {
         this.animation.draw();
       } else {
         const { x, y, width, height, index } = this._offset;
         Renderer.image(
-          this.sprite,
+          this.source,
           // position on canvas
           0,
           0,
@@ -52,17 +52,17 @@ export class AvatarSprite extends Sprite<Avatar | undefined | null> {
   }
 
   initial(params?: AvatarGetInitialParams<this>) {
-    const { offset, sprite, ..._params } = (params ||
+    const { offset, source, ..._params } = (params ||
       {}) as AvatarGetInitialParams<this>;
 
-    if (sprite) {
-      this._offset.width = sprite.width;
-      this._offset.height = sprite.height;
+    if (source) {
+      this._offset.width = source.width;
+      this._offset.height = source.height;
     }
     if (offset) {
       copyProperties(this._offset, offset);
     }
 
-    super.initial({ ..._params, sprite });
+    super.initial({ ..._params, source });
   }
 }

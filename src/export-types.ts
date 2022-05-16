@@ -26,7 +26,7 @@ export type EntityInitial<E extends Entity> = {
   //@ts-ignore
   bodyOptions?: Parameters<E["onCreateBody"]>[1];
   sound?: Sound;
-  sprite?: import("./classes/logic-component").LogicComponent<Sprite>;
+  sprite?: import("./classes/logic-component").LogicComponent<Sprite<any>>;
 };
 
 export type Configable<C extends { initial: any } = Entity> =

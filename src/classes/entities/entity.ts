@@ -14,9 +14,9 @@ import {
   Sound,
 } from "../../export-types";
 
-export abstract class Entity {
+export abstract class Entity<SpriteType extends Sprite<any> = any> {
   private _body!: MasterBody;
-  private _sprite!: Sprite;
+  private _sprite!: SpriteType;
   private readonly id: string = `${Math.random()}-${new Date().getTime()}`;
 
   public readonly tag!: string;
@@ -29,7 +29,7 @@ export abstract class Entity {
     this.tag = (this as any).constructor.tag;
   }
 
-  set sprite(sprite: Sprite) {
+  set sprite(sprite: SpriteType) {
     this._sprite = sprite;
     this._sprite.entity = this;
   }
@@ -96,6 +96,7 @@ export abstract class Entity {
 
     this.sound = sound;
 
+    //@ts-ignore
     this.sprite =
       dfSpriteComponent?.output() ||
       spriteComponent?.output() ||

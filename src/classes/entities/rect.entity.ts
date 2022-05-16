@@ -1,8 +1,12 @@
 import { Bodies, Body } from "matter-js";
+
 import { CreateBodyDefine, EntityInitial } from "../../export-types";
+import { Sprite } from "../sprites/sprite";
 import { Entity } from "./entity";
 
-export class RectEntity extends Entity {
+export class RectEntity<
+  SpriteType extends Sprite<any> = any
+> extends Entity<SpriteType> {
   public width!: number;
   public height!: number;
 

@@ -2,8 +2,8 @@ import { ColorSprite } from "../sprites/color.sprite";
 import { AnimationSprite } from "./animation";
 
 export class ColorAnimationSprite extends AnimationSprite<ColorSprite> {
-  private colors!: ColorSprite["sprite"][];
-  initial(colors: ColorSprite["sprite"][]) {
+  private colors!: ColorSprite["source"][];
+  initial(colors: ColorSprite["source"][]) {
     this.colors = colors;
   }
 

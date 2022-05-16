@@ -22,19 +22,18 @@ export class AvatarAnimationSprite extends AnimationSprite<AvatarSprite> {
 
   protected checkFrameMax(): boolean {
     const { width, x } = this.offset;
-    return this.currentFrame * width + x >= this.source.sprite!.width;
+    return this.currentFrame * width + x >= this.sprite.source!.width;
   }
 
   onDraw() {
-    const source = this.source;
     const { x, y, width, height } = this.offset;
     Renderer.image(
-      source.sprite!,
+      this.sprite.source!,
       // position on canvas
       0,
       0,
-      source.width,
-      source.height,
+      this.sprite.width,
+      this.sprite.height,
       //crop on source image
       this.currentFrame * width + x,
       y,

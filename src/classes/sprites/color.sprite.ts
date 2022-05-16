@@ -5,13 +5,13 @@ import { Sprite } from "./sprite";
 export class ColorSprite extends Sprite<Color> {
   constructor() {
     super();
-    this.sprite = [255, 255, 255];
+    this.source = [255, 255, 255];
   }
   onDraw() {
     if (this.animation) {
       this.animation.draw();
     } else {
-      Renderer.fill(...this.sprite);
+      Renderer.fill(...this.source);
     }
     if ((this.entity as RectEntity).width != null) {
       Renderer.rect(0, 0, this.width, this.height);
