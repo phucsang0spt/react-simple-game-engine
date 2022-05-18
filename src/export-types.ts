@@ -3,6 +3,7 @@ import { Sprite } from "./classes/sprites/sprite";
 
 import type p5 from "p5";
 import type { Body, IChamferableBodyDefinition } from "matter-js";
+import { Initialler } from "./export-interfaces";
 
 export type P5 = p5;
 
@@ -29,8 +30,8 @@ export type EntityInitial<E extends Entity> = {
   sprite?: import("./classes/logic-component").LogicComponent<Sprite<any>>;
 };
 
-export type Configable<C extends { initial: any } = Entity> =
+export type Configable<C extends Initialler = Initialler> =
   | {
       new (): C;
     }
-  | [{ new (): C }, Parameters<C["initial"]>[0]?];
+  | [{ new (): C }, Parameters<C["initial"]>[0]];

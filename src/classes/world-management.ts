@@ -1,9 +1,11 @@
 import { Engine, World, Events } from "matter-js";
 import { MasterBody } from "../export-types";
 import { Entity } from "./entities/entity";
+import { EntitySult } from "./entities/entity-sult";
 
 export class WorldManagement {
-  private entities: Entity[] = [];
+  private entities: EntitySult[] = [];
+
   private engine!: Engine;
   constructor() {
     this.engine = Engine.create();
@@ -47,14 +49,18 @@ export class WorldManagement {
     Engine.clear(this.engine);
   }
 
-  addEntity(entity: Entity) {
+  addEntity(entity: EntitySult) {
     this.entities.push(entity);
-    World.add(this.engine.world, entity.body);
+    if (entity instanceof Entity) {
+      World.add(this.engine.world, entity.body);
+    }
     entity.active(this);
   }
 
-  removeEntity(entity: Entity) {
-    World.remove(this.engine.world, entity.body);
+  removeEntity(entity: EntitySult) {
+    if (entity instanceof Entity) {
+      World.remove(this.engine.world, entity.body);
+    }
     this.entities.splice(this.entities.indexOf(entity), 1);
   }
 

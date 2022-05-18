@@ -1,11 +1,11 @@
 import { ComponentType } from "react";
 
-import { Entity } from "./entities/entity";
-
 import { Camera } from "./camera";
 import { LogicComponent } from "./logic-component";
 import { SceneManagement } from "./scene-management";
 import { WorldManagement } from "./world-management";
+import { EntitySult } from "./entities/entity-sult";
+
 import { tick } from "../utils";
 
 type LoadAssetsListener = (loadedAssets: boolean) => void;
@@ -20,7 +20,7 @@ export abstract class Scene<UIP = any> {
   public tag: string;
   public manager!: SceneManagement;
   public readonly sessionId: string = `${Math.random()}-${new Date().getTime()}`;
-  public abstract getComponents(): LogicComponent[];
+  public abstract getComponents(camera: Camera): LogicComponent<EntitySult>[];
 
   constructor() {
     this.tag = (this as any).constructor.tag;
@@ -83,10 +83,9 @@ export abstract class Scene<UIP = any> {
 
   bootstrap(camera: Camera) {
     this.worldManagement = new WorldManagement();
-    const components = this.getComponents();
+    const components = this.getComponents(camera);
     for (const component of components) {
-      const entity: Entity = component.output() as any;
-      entity.camera = camera;
+      const entity: EntitySult = component.output({ camera });
       this.worldManagement.addEntity(entity);
     }
   }

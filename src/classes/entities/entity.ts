@@ -13,8 +13,11 @@ import {
   MasterBody,
   Sound,
 } from "../../export-types";
+import { EntitySult } from "./entity-sult";
 
-export abstract class Entity<SpriteType extends Sprite<any> = any> {
+export abstract class Entity<
+  SpriteType extends Sprite<any> = any
+> extends EntitySult<EntityInitial<Entity>> {
   private _body!: MasterBody;
   private _sprite!: SpriteType;
   private readonly id: string = `${Math.random()}-${new Date().getTime()}`;
@@ -26,6 +29,7 @@ export abstract class Entity<SpriteType extends Sprite<any> = any> {
   protected sound?: Sound;
 
   constructor() {
+    super();
     this.tag = (this as any).constructor.tag;
   }
 
