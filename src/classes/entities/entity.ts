@@ -20,10 +20,10 @@ export abstract class Entity<
 > extends EntitySult<EntityInitial<Entity>> {
   private _body!: MasterBody;
   private _sprite!: SpriteType;
+  private _children: EntitySult[] = [];
   private readonly id: string = `${Math.random()}-${new Date().getTime()}`;
 
   public readonly tag!: string;
-  public camera!: Camera;
 
   protected worldManagement!: WorldManagement;
   protected sound?: Sound;
@@ -48,6 +48,23 @@ export abstract class Entity<
 
   get body() {
     return this._body;
+  }
+
+  get children() {
+    return this._children;
+  }
+
+  addChild(entity: EntitySult) {
+    this.children.push(entity);
+    this.worldManagement.addEntity(entity);
+  }
+
+  removeChild(entity: EntitySult) {
+    const delIndex = this.children.indexOf(entity);
+    if (delIndex > -1) {
+      this.children.splice(delIndex, 1);
+      this.worldManagement.removeEntity(entity);
+    }
   }
 
   active(worldManagement: WorldManagement) {

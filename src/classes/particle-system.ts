@@ -35,7 +35,6 @@ export class ParticleSystem extends EntitySult<ParticleSystemInitialParams> {
 
   public quantityPerFrame: number = 50;
   public vecWeight: number = 5;
-  public camera!: Camera;
 
   active() {
     console.log(`Initted particle system`, this.particles.length);

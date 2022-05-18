@@ -1,13 +1,14 @@
 import { Engine, World, Events } from "matter-js";
 import { MasterBody } from "../export-types";
+import { Camera } from "./camera";
 import { Entity } from "./entities/entity";
 import { EntitySult } from "./entities/entity-sult";
 
 export class WorldManagement {
   private entities: EntitySult[] = [];
-
   private engine!: Engine;
-  constructor() {
+
+  constructor(private camera: Camera) {
     this.engine = Engine.create();
     Events.on(this.engine, "collisionStart", (event) => {
       const pairs = event.pairs;
@@ -50,6 +51,8 @@ export class WorldManagement {
   }
 
   addEntity(entity: EntitySult) {
+    // temp pass modifier
+    entity["camera"] = this.camera;
     this.entities.push(entity);
     if (entity instanceof Entity) {
       World.add(this.engine.world, entity.body);
@@ -58,10 +61,16 @@ export class WorldManagement {
   }
 
   removeEntity(entity: EntitySult) {
-    if (entity instanceof Entity) {
-      World.remove(this.engine.world, entity.body);
+    const delIndex = this.entities.indexOf(entity);
+    if (delIndex > -1) {
+      if (entity instanceof Entity) {
+        World.remove(this.engine.world, entity.body);
+        for (const child of entity.children) {
+          this.removeEntity(child);
+        }
+      }
+      this.entities.splice(this.entities.indexOf(entity), 1);
     }
-    this.entities.splice(this.entities.indexOf(entity), 1);
   }
 
   update() {

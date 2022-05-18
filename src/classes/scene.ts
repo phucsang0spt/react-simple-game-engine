@@ -82,10 +82,10 @@ export abstract class Scene<UIP = any> {
   async onLoadAssets() {}
 
   bootstrap(camera: Camera) {
-    this.worldManagement = new WorldManagement();
+    this.worldManagement = new WorldManagement(camera);
     const components = this.getComponents(camera);
     for (const component of components) {
-      const entity: EntitySult = component.output({ camera });
+      const entity: EntitySult = component.output();
       this.worldManagement.addEntity(entity);
     }
   }
