@@ -1,8 +1,5 @@
 import Matter from "matter-js";
 
-import { Camera } from "../camera";
-import { WorldManagement } from "../world-management";
-
 import { Sprite } from "../sprites/sprite";
 import { ColorSprite } from "../sprites/color.sprite";
 
@@ -14,26 +11,16 @@ import {
   Sound,
 } from "../../export-types";
 import { EntitySult } from "./entity-sult";
+import { LogicComponent } from "../logic-component";
 
-export abstract class Entity<
-  SpriteType extends Sprite<any> = any
-> extends EntitySult<EntityInitial<Entity>> {
+export abstract class Entity extends EntitySult<EntityInitial<Entity>> {
   private _body!: MasterBody;
-  private _sprite!: SpriteType;
+  private _sprite!: Sprite<any>;
   private _children: EntitySult[] = [];
-  private readonly id: string = `${Math.random()}-${new Date().getTime()}`;
 
-  public readonly tag!: string;
+  public sound?: Sound;
 
-  protected worldManagement!: WorldManagement;
-  protected sound?: Sound;
-
-  constructor() {
-    super();
-    this.tag = (this as any).constructor.tag;
-  }
-
-  set sprite(sprite: SpriteType) {
+  set sprite(sprite: Sprite<any>) {
     this._sprite = sprite;
     this._sprite.entity = this;
   }
@@ -54,7 +41,8 @@ export abstract class Entity<
     return this._children;
   }
 
-  addChild(entity: EntitySult) {
+  addChild(target: EntitySult | LogicComponent<EntitySult>) {
+    const entity = target instanceof EntitySult ? target : target.output();
     this.children.push(entity);
     this.worldManagement.addEntity(entity);
   }
@@ -66,13 +54,6 @@ export abstract class Entity<
       this.worldManagement.removeEntity(entity);
     }
   }
-
-  active(worldManagement: WorldManagement) {
-    console.log(`Initted ${this.tag} entity (id : ${this.id})`);
-    this.worldManagement = worldManagement;
-    this.onActive();
-  }
-  onActive() {}
 
   createBody(
     transform: CreateBodyDefine["transform"],

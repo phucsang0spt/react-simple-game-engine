@@ -48,17 +48,17 @@ export abstract class Scene<UIP = any> {
     return this._loadedAssets;
   }
 
+  private set loadedAssets(loadedAssets: boolean) {
+    this._loadedAssets = loadedAssets;
+    this.loadAssetsListener?.(loadedAssets);
+  }
+
   onLoadAssetNotify(func: LoadAssetsListener) {
     this.loadAssetsListener = func;
   }
 
   destructor() {
     this.worldManagement.destructor();
-  }
-
-  setLoadAssetStatus(loadedAssets: boolean) {
-    this._loadedAssets = loadedAssets;
-    this.loadAssetsListener?.(loadedAssets);
   }
 
   switchToScene(tag: string) {
@@ -72,19 +72,20 @@ export abstract class Scene<UIP = any> {
     // if delay less than 0, it will wait forever
     await tick(this.assetsDelay < 0 ? undefined : this.assetsDelay);
 
-    this.setLoadAssetStatus(false);
+    this.loadedAssets = false;
     await this.onLoadAssets().catch((err) => {
       console.warn("Load assets fail", err.toString());
     });
-    this.setLoadAssetStatus(true);
+    this.loadedAssets = true;
   }
 
   async onLoadAssets() {}
 
   bootstrap(camera: Camera) {
-    this.worldManagement = new WorldManagement(camera);
+    this.worldManagement = new WorldManagement(camera, this);
     const components = this.getComponents(camera);
     for (const component of components) {
+      component.worldManagement = this.worldManagement;
       const entity: EntitySult = component.output();
       this.worldManagement.addEntity(entity);
     }

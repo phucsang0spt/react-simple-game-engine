@@ -1,8 +1,7 @@
 import p5 from "p5";
 import { copyProperties } from "../utils";
-import { Camera } from "./camera";
-import { EntitySult } from "./entities/entity-sult";
 import { Particle, ParticleInitialParams } from "./particle";
+import { EntitySult } from "./entities/entity-sult";
 
 type ParticleClass = {
   new (...args: ConstructorParameters<typeof Particle>): Particle;
@@ -35,10 +34,6 @@ export class ParticleSystem extends EntitySult<ParticleSystemInitialParams> {
 
   public quantityPerFrame: number = 50;
   public vecWeight: number = 5;
-
-  active() {
-    console.log(`Initted particle system`, this.particles.length);
-  }
 
   initial({
     forces,

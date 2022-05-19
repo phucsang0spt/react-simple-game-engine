@@ -1,6 +1,10 @@
 import { Engine, World, Events } from "matter-js";
+
 import { MasterBody } from "../export-types";
+
 import { Camera } from "./camera";
+import { Scene } from "./scene";
+
 import { Entity } from "./entities/entity";
 import { EntitySult } from "./entities/entity-sult";
 
@@ -8,7 +12,7 @@ export class WorldManagement {
   private entities: EntitySult[] = [];
   private engine!: Engine;
 
-  constructor(private camera: Camera) {
+  constructor(private _camera: Camera, private _scene: Scene) {
     this.engine = Engine.create();
     Events.on(this.engine, "collisionStart", (event) => {
       const pairs = event.pairs;
@@ -45,6 +49,14 @@ export class WorldManagement {
     });
   }
 
+  get camera() {
+    return this._camera;
+  }
+
+  get scene() {
+    return this._scene;
+  }
+
   destructor() {
     World.clear(this.engine.world, false);
     Engine.clear(this.engine);
@@ -52,7 +64,6 @@ export class WorldManagement {
 
   addEntity(entity: EntitySult) {
     // temp pass modifier
-    entity["camera"] = this.camera;
     this.entities.push(entity);
     if (entity instanceof Entity) {
       World.add(this.engine.world, entity.body);
