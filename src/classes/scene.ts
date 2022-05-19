@@ -85,8 +85,9 @@ export abstract class Scene<UIP = any> {
     this.worldManagement = new WorldManagement(camera, this);
     const components = this.getComponents(camera);
     for (const component of components) {
-      component.worldManagement = this.worldManagement;
-      const entity: EntitySult = component.output();
+      const entity: EntitySult = component.output({
+        worldManagement: this.worldManagement,
+      });
       this.worldManagement.addEntity(entity);
     }
   }

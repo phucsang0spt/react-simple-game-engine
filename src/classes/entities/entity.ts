@@ -42,7 +42,10 @@ export abstract class Entity extends EntitySult<EntityInitial<Entity>> {
   }
 
   addChild(target: EntitySult | LogicComponent<EntitySult>) {
-    const entity = target instanceof EntitySult ? target : target.output();
+    const entity =
+      target instanceof EntitySult
+        ? target
+        : target.output({ worldManagement: this.worldManagement });
     this.children.push(entity);
     this.worldManagement.addEntity(entity);
   }

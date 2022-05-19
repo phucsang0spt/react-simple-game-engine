@@ -2,6 +2,7 @@ import p5 from "p5";
 import { copyProperties } from "../utils";
 import { Particle, ParticleInitialParams } from "./particle";
 import { EntitySult } from "./entities/entity-sult";
+import { EntityTag } from "../decorators/entity-tag.decor";
 
 type ParticleClass = {
   new (...args: ConstructorParameters<typeof Particle>): Particle;
@@ -23,6 +24,7 @@ type ParticleSystemInitialParams = {
   forces?: p5.Vector[];
 };
 
+@EntityTag("particle-system")
 export class ParticleSystem extends EntitySult<ParticleSystemInitialParams> {
   private particles: Particle[] = [];
   private forces: p5.Vector[] = [];
