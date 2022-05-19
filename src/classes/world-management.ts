@@ -1,4 +1,4 @@
-import { Engine, World, Events } from "matter-js";
+import { Engine, World, Events, Body } from "matter-js";
 
 import { MasterBody } from "../export-types";
 
@@ -9,11 +9,22 @@ import { Entity } from "./entities/entity";
 import { EntitySult } from "./entities/entity-sult";
 
 export class WorldManagement {
-  private entities: EntitySult[] = [];
-  private engine!: Engine;
+  private _entities: EntitySult[] = [];
+  private _engine!: Engine;
 
   constructor(private _camera: Camera, private _scene: Scene) {
-    this.engine = Engine.create();
+    this._engine = Engine.create();
+    Events.on(this.engine, "beforeUpdate", () => {
+      const gravity = this.engine.gravity;
+      for (const entity of this.entities) {
+        if (entity instanceof Entity && !entity.enabledGravity) {
+          Body.applyForce(entity.body, entity.position, {
+            x: -gravity.x * gravity.scale * entity.body.mass,
+            y: -gravity.y * gravity.scale * entity.body.mass,
+          });
+        }
+      }
+    });
     Events.on(this.engine, "collisionStart", (event) => {
       const pairs = event.pairs;
       for (const pair of pairs) {
@@ -47,6 +58,14 @@ export class WorldManagement {
         bodyB.entity.onCollisionActive(bodyA.entity);
       }
     });
+  }
+
+  get entities() {
+    return this._entities;
+  }
+
+  get engine() {
+    return this._engine;
   }
 
   get camera() {

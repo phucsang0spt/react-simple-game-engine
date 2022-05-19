@@ -12,12 +12,14 @@ import {
 } from "../../export-types";
 import { EntitySult } from "./entity-sult";
 import { LogicComponent } from "../logic-component";
+import { copyProperties } from "../../utils";
 
 export abstract class Entity extends EntitySult<EntityInitial<Entity>> {
   private _body!: MasterBody;
   private _sprite!: Sprite<any>;
   private _children: EntitySult[] = [];
 
+  public enabledGravity: boolean = true;
   public sound?: Sound;
 
   set sprite(sprite: Sprite<any>) {
@@ -73,21 +75,23 @@ export abstract class Entity extends EntitySult<EntityInitial<Entity>> {
   ): Matter.Body;
 
   initial({
-    sound,
     transform = {},
     sprite: spriteComponent,
     bodyOptions = {},
+    ...params
   }: EntityInitial<this>) {
     const {
       transform: { x = 0, y = 0, ...dfTransform } = {},
       bodyOptions: dfBodyOptions,
       sprite: dfSpriteComponent,
+      ...dfParams
     } = this.onInitial();
 
     const {
       transform: transformAlt,
       bodyOptions: bodyOptionsAlt,
       sprite: spriteComponentAlt,
+      ...paramsAlt
     } = this.onPrepare();
 
     this.createBody(
@@ -99,7 +103,11 @@ export abstract class Entity extends EntitySult<EntityInitial<Entity>> {
       }
     );
 
-    this.sound = sound;
+    copyProperties(this, {
+      ...dfParams,
+      ...params,
+      ...paramsAlt,
+    });
 
     //@ts-ignore
     this.sprite =

@@ -42,7 +42,7 @@ export abstract class EntitySult<P = any> implements Initialler<P> {
       this._scene = worldManagement.scene;
       this.camera = worldManagement.camera;
     }
-    console.log(`Initted ${this.tag} entity (id : ${this.id})`);
+    console.log(`Active ${this.tag} entity (id : ${this.id})`);
     this.onActive();
   }
 
