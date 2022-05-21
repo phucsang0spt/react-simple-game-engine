@@ -28,6 +28,7 @@ export type EntityInitial<E extends Entity> = {
   sprite?: import("./classes/logic-component").LogicComponent<Sprite<any>>;
   sound?: Sound;
   enabledGravity?: boolean;
+  name?: string;
 };
 
 export type Configable<C extends Initialler = Initialler> =

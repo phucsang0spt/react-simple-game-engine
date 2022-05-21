@@ -40,7 +40,6 @@ export class P5 extends p5 {
       });
     }
     this.shuffle(items, true);
-    console.log("Collection generated: ", items);
     return this.random(items);
   }
 }

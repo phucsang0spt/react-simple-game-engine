@@ -81,6 +81,11 @@ export class WorldManagement {
     Engine.clear(this.engine);
   }
 
+  getEntity<T extends EntitySult = EntitySult>(name: string): T {
+    //@ts-ignore
+    return this.entities.find((entity) => entity.name === name);
+  }
+
   addEntity(entity: EntitySult) {
     // temp pass modifier
     this.entities.push(entity);
