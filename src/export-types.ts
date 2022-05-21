@@ -1,14 +1,13 @@
 import { Entity } from "./classes/entities/entity";
 import { Sprite } from "./classes/sprites/sprite";
 
-import type p5 from "p5";
 import type { Body, IChamferableBodyDefinition } from "matter-js";
 import { Initialler } from "./export-interfaces";
 
-export type P5 = p5;
+export type { Collection } from "./classes/p5";
 
 export type Sound = HTMLAudioElement;
-export type Avatar = ReturnType<P5["loadImage"]>;
+export type Avatar = ReturnType<import("./classes/p5").P5["loadImage"]>;
 export type Color = [number, number, number, number?];
 
 export type EntityPrepare<E extends Entity> = EntityInitial<E>;

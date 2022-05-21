@@ -1,8 +1,7 @@
-import p5 from "p5";
 import { useEffect, useRef } from "react";
 
 import { Camera } from "../classes/camera";
-import { P5 } from "../export-types";
+import { P5 } from "../classes/p5";
 
 type SketchProps = {
   onSetup: (camera: Camera) => void;
@@ -61,7 +60,7 @@ export function Sketch({
       };
     };
 
-    new p5(sketch);
+    new P5(sketch);
     // eslint-disable-next-line
   }, []);
 

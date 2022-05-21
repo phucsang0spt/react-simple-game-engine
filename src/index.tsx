@@ -1,3 +1,5 @@
+export { P5 } from "./classes/p5";
+
 export { createAssetImage, createAssetSound } from "./utils";
 
 export { ParticleSystem } from "./classes/particle-system";
