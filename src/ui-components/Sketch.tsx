@@ -22,20 +22,14 @@ export function Sketch({
 
   useEffect(() => {
     const sketch = (s: P5) => {
-      window.Renderer = s;
-      let camera: Camera;
-
+      const camera = new Camera(width, height);
       s.preload = () => {
         return onPreload?.();
       };
 
       s.setup = () => {
-        camera = new Camera(width, height);
         s.createCanvas(width, height).parent(refContainer.current!);
         onSetup(camera);
-
-        //@ts-ignore
-        window.camera = camera;
       };
 
       s.draw = () => {
@@ -44,19 +38,6 @@ export function Sketch({
         s.imageMode(s.CENTER);
         s.rectMode(s.CENTER);
         onDraw();
-        // if (s.keyIsDown(s.DOWN_ARROW)) {
-        //   camera.y += 2;
-        // }
-        // if (s.keyIsDown(s.UP_ARROW)) {
-        //   camera.y -= 2;
-        // }
-
-        // if (s.keyIsDown(s.LEFT_ARROW)) {
-        //   camera.x -= 2;
-        // }
-        // if (s.keyIsDown(s.RIGHT_ARROW)) {
-        //   camera.x += 2;
-        // }
       };
     };
 
