@@ -3,7 +3,7 @@ import { Bodies, Body } from "matter-js";
 import { CreateBodyDefine, EntityInitial } from "../../export-types";
 import { Entity } from "./entity";
 
-export class RectEntity extends Entity {
+export class RectEntity<P extends Record<string, any> = any> extends Entity<P> {
   public width!: number;
   public height!: number;
 
@@ -14,7 +14,7 @@ export class RectEntity extends Entity {
     };
   }
 
-  protected onInitial(): EntityInitial<RectEntity> {
+  protected onInitial(): EntityInitial<this> {
     return {
       transform: {
         width: 10,

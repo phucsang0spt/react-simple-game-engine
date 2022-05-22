@@ -1,4 +1,4 @@
-import Matter from "matter-js";
+import Matter, { Bodies, Body } from "matter-js";
 
 import { Sprite } from "../sprites/sprite";
 import { ColorSprite } from "../sprites/color.sprite";
@@ -14,10 +14,13 @@ import { EntitySult } from "./entity-sult";
 import { LogicComponent } from "../logic-component";
 import { copyProperties } from "../../utils";
 
-export abstract class Entity extends EntitySult<EntityInitial<Entity>> {
+export abstract class Entity<
+  P extends Record<string, any> = Record<string, any>
+> extends EntitySult<EntityInitial<Entity>> {
   private _body!: MasterBody;
   private _sprite!: Sprite<any>;
   private _children: EntitySult[] = [];
+  private _props: Partial<P> = {};
 
   public enabledGravity: boolean = true;
   public sound?: Sound;
@@ -41,6 +44,10 @@ export abstract class Entity extends EntitySult<EntityInitial<Entity>> {
 
   get children() {
     return this._children;
+  }
+
+  get props() {
+    return this._props as P;
   }
 
   addChild(target: EntitySult | LogicComponent<EntitySult>) {
@@ -77,20 +84,28 @@ export abstract class Entity extends EntitySult<EntityInitial<Entity>> {
   initial({
     transform = {},
     sprite: spriteComponent,
-    bodyOptions = {},
+    bodyOptions,
+    props = {},
     ...params
   }: EntityInitial<this>) {
     const {
       transform: { x = 0, y = 0, ...dfTransform } = {},
       bodyOptions: dfBodyOptions,
       sprite: dfSpriteComponent,
+      props: dfProps = {},
       ...dfParams
     } = this.onInitial();
+
+    copyProperties(this._props, {
+      ...dfProps,
+      ...props,
+    });
 
     const {
       transform: transformAlt,
       bodyOptions: bodyOptionsAlt,
       sprite: spriteComponentAlt,
+      props: propsAlt = {},
       ...paramsAlt
     } = this.onPrepare();
 
@@ -102,6 +117,10 @@ export abstract class Entity extends EntitySult<EntityInitial<Entity>> {
         ...bodyOptionsAlt,
       }
     );
+
+    copyProperties(this._props, {
+      ...propsAlt,
+    });
 
     copyProperties(this, {
       ...dfParams,

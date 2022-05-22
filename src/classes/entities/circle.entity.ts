@@ -3,7 +3,9 @@ import { Body, Bodies } from "matter-js";
 import { CreateBodyDefine, EntityInitial } from "../../export-types";
 import { Entity } from "./entity";
 
-export class CircleEntity extends Entity {
+export class CircleEntity<
+  P extends Record<string, any> = Record<string, any>
+> extends Entity<P> {
   public radius!: number;
 
   onSpriteWidthHeightBinding(): { width: number; height: number } {
@@ -13,7 +15,7 @@ export class CircleEntity extends Entity {
     };
   }
 
-  protected onInitial(): EntityInitial<CircleEntity> {
+  protected onInitial(): EntityInitial<this> {
     return {
       transform: {
         radius: 5,

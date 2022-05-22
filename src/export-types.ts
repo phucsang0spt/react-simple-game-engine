@@ -29,6 +29,8 @@ export type EntityInitial<E extends Entity> = {
   sound?: Sound;
   enabledGravity?: boolean;
   name?: string;
+  //@ts-ignore
+  props?: E["_props"];
 };
 
 export type Configable<C extends Initialler = Initialler> =
