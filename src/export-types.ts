@@ -30,7 +30,7 @@ export type EntityInitial<E extends Entity> = {
   enabledGravity?: boolean;
   name?: string;
   //@ts-ignore
-  props?: E["_props"];
+  props?: Partial<E["props"]>;
 };
 
 export type Configable<C extends Initialler = Initialler> =
