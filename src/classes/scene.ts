@@ -9,12 +9,17 @@ import { EntitySult } from "./entities/entity-sult";
 import { tick } from "../utils";
 
 type LoadAssetsListener = (loadedAssets: boolean) => void;
+type EntityPropsChangeListener<V = any> = (value: V) => void;
 
 export abstract class Scene<UIP = any> {
   private ui: ComponentType<UIP>;
   private worldManagement!: WorldManagement;
   private _loadedAssets!: boolean;
   private loadAssetsListener!: LoadAssetsListener;
+  private entityPropsChangeListeners: Record<
+    string,
+    EntityPropsChangeListener[]
+  > = {};
 
   public assetsDelay: number = 0;
   public tag: string;
@@ -51,6 +56,30 @@ export abstract class Scene<UIP = any> {
   private set loadedAssets(loadedAssets: boolean) {
     this._loadedAssets = loadedAssets;
     this.loadAssetsListener?.(loadedAssets);
+  }
+
+  emitEntityPropsChangeListener<V = any>(name: string, value: V) {
+    const listeners = this.entityPropsChangeListeners[name] || [];
+    for (const listener of listeners) {
+      listener(value);
+    }
+  }
+
+  onEntityPropsChangeListener<V = any>(
+    name: string,
+    func: EntityPropsChangeListener<V>
+  ) {
+    const listeners = (this.entityPropsChangeListeners[name] =
+      this.entityPropsChangeListeners[name] || []);
+
+    listeners.push(func);
+
+    return () => {
+      const index = listeners.indexOf(func);
+      if (index > -1) {
+        listeners.splice(index, 1);
+      }
+    };
   }
 
   onLoadAssetNotify(func: LoadAssetsListener) {
@@ -96,8 +125,10 @@ export abstract class Scene<UIP = any> {
   protected onUpdate() {}
 
   action() {
-    this.onUpdate();
-    this.worldManagement.update();
+    if (Renderer.running) {
+      this.onUpdate();
+      this.worldManagement.update();
+    }
 
     Renderer.background(41, 41, 41);
     this.onDraw();

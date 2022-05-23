@@ -6,6 +6,8 @@ type LastItem<I> = [I];
 export type Collection<I> = [...ItemWithPercent<I>[], LastItem<I>];
 
 export class P5 extends p5 {
+  running = true;
+
   constructor(sketch: (p5: P5) => void) {
     super(sketch);
     window.Renderer = this;

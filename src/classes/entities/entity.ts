@@ -14,6 +14,8 @@ import { EntitySult } from "./entity-sult";
 import { LogicComponent } from "../logic-component";
 import { copyProperties } from "../../utils";
 
+type TimerJobListener = () => void;
+
 export abstract class Entity<
   P extends Record<string, any> = Record<string, any>
 > extends EntitySult<EntityInitial<Entity>> {
@@ -21,6 +23,15 @@ export abstract class Entity<
   private _sprite!: Sprite<any>;
   private _children: EntitySult[] = [];
   private _props: Partial<P> = {};
+  private timerJobListeners: Record<
+    string,
+    {
+      timeCounter: number;
+      interval: number;
+      job: TimerJobListener;
+      defaultRun: boolean;
+    }
+  > = {};
 
   public enabledGravity: boolean = true;
   public sound?: Sound;
@@ -48,6 +59,30 @@ export abstract class Entity<
 
   get props() {
     return this._props as P;
+  }
+
+  /**
+   * @param {string} name
+   * @param {number} interval in seconds
+   * @param {TimerJobListener} job function that run per #interval
+   * @void
+   */
+  onTimer(
+    name: string,
+    interval: number,
+    job: TimerJobListener,
+    defaultRun = false
+  ) {
+    if (!this.timerJobListeners[name]) {
+      this.timerJobListeners[name] = {
+        timeCounter: 0,
+        interval,
+        job,
+        defaultRun,
+      };
+    } else {
+      console.warn(`Job with name ${name} is already assigned`);
+    }
   }
 
   addChild(target: EntitySult | LogicComponent<EntitySult>) {
@@ -143,6 +178,18 @@ export abstract class Entity<
 
   update() {
     this.onUpdate();
+    for (const name in this.timerJobListeners) {
+      let { timeCounter, interval, job, defaultRun } =
+        this.timerJobListeners[name];
+      if (defaultRun || timeCounter / 1000 >= interval) {
+        timeCounter = 0;
+        job();
+        this.timerJobListeners[name].defaultRun = false;
+      }
+      timeCounter += Renderer.deltaTime;
+
+      this.timerJobListeners[name].timeCounter = timeCounter;
+    }
   }
   onUpdate() {}
 

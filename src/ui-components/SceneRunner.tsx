@@ -61,7 +61,7 @@ export function SceneRunner({
           zIndex: 2,
         }}
       >
-        <current.UI {...current.UIProps} />
+        <current.UI scene={current} {...current.UIProps} />
       </div>
     </div>
   ) : (
