@@ -15,16 +15,22 @@ export type MasterBody = Body & {
   entity: Entity;
 };
 
-export type CreateBodyDefine = {
-  transform?: { x?: number; y?: number };
+export type CreateBodyDefine<
+  E extends Record<string, any> = Record<string, any>
+> = {
+  transform?: { x?: number; y?: number } & E;
   bodyOptions?: IChamferableBodyDefinition;
 };
 
+//@ts-ignore
+type TransformArgs<E extends Entity> = Parameters<E["onCreateBody"]>[0];
+
+//@ts-ignore
+type BodyOptionsArgs<E extends Entity> = Parameters<E["onCreateBody"]>[1];
+
 export type EntityInitial<E extends Entity> = {
-  //@ts-ignore
-  transform?: Parameters<E["onCreateBody"]>[0];
-  //@ts-ignore
-  bodyOptions?: Parameters<E["onCreateBody"]>[1];
+  transform?: TransformArgs<E>;
+  bodyOptions?: BodyOptionsArgs<E>;
   sprite?: import("./classes/logic-component").LogicComponent<Sprite<any>>;
   sound?: Sound;
   enabledGravity?: boolean;

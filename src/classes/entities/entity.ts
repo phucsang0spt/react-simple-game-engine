@@ -112,12 +112,12 @@ export abstract class Entity<
   }
 
   protected abstract onCreateBody(
-    transform: CreateBodyDefine["transform"] | undefined,
+    transform: CreateBodyDefine["transform"],
     options?: CreateBodyDefine["bodyOptions"]
   ): Matter.Body;
 
   initial({
-    transform = {},
+    transform,
     sprite: spriteComponent,
     bodyOptions,
     props = {},

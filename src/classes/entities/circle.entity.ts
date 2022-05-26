@@ -1,6 +1,7 @@
 import { Body, Bodies } from "matter-js";
 
 import { CreateBodyDefine, EntityInitial } from "../../export-types";
+import { copyProperties } from "../../utils";
 import { Entity } from "./entity";
 
 export class CircleEntity<
@@ -18,16 +19,20 @@ export class CircleEntity<
   protected onInitial(): EntityInitial<this> {
     return {
       transform: {
-        radius: 5,
+        radius: 1,
       },
     };
   }
 
   protected onCreateBody(
-    transform: CreateBodyDefine["transform"] & { radius: number },
+    {
+      x,
+      y,
+      ...transform
+    }: NonNullable<CreateBodyDefine<{ radius: number }>["transform"]>,
     options?: CreateBodyDefine["bodyOptions"]
   ): Body {
-    this.radius = transform.radius;
-    return Bodies.circle(transform.x!, transform.y!, transform.radius, options);
+    copyProperties(this, transform);
+    return Bodies.circle(x!, y!, this.radius, options);
   }
 }

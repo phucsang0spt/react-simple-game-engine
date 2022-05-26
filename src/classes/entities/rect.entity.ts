@@ -1,6 +1,7 @@
 import { Bodies, Body } from "matter-js";
 
 import { CreateBodyDefine, EntityInitial } from "../../export-types";
+import { copyProperties } from "../../utils";
 import { Entity } from "./entity";
 
 export class RectEntity<P extends Record<string, any> = any> extends Entity<P> {
@@ -17,27 +18,26 @@ export class RectEntity<P extends Record<string, any> = any> extends Entity<P> {
   protected onInitial(): EntityInitial<this> {
     return {
       transform: {
-        width: 10,
-        height: 10,
+        width: 1,
+        height: 1,
       },
     };
   }
 
   protected onCreateBody(
-    transform: CreateBodyDefine["transform"] & {
-      width: number;
-      height: number;
-    },
+    {
+      x,
+      y,
+      ...transform
+    }: NonNullable<
+      CreateBodyDefine<{
+        width?: number;
+        height?: number;
+      }>["transform"]
+    >,
     options?: CreateBodyDefine["bodyOptions"]
   ): Body {
-    this.width = transform.width;
-    this.height = transform.height;
-    return Bodies.rectangle(
-      transform.x!,
-      transform.y!,
-      transform.width,
-      transform.height,
-      options
-    );
+    copyProperties(this, transform);
+    return Bodies.rectangle(x!, y!, this.width, this.height, options);
   }
 }
