@@ -41,7 +41,10 @@ export function Sketch({
       };
     };
 
-    new P5(sketch);
+    const p5 = new P5(sketch);
+    return () => {
+      p5.remove();
+    };
     // eslint-disable-next-line
   }, []);
 
