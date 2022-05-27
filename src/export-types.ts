@@ -39,8 +39,10 @@ export type EntityInitial<E extends Entity> = {
   props?: Partial<E["props"]>;
 };
 
+export type Configation<C extends Initialler> = Parameters<C["initial"]>[0];
+
 export type Configable<C extends Initialler = Initialler> =
   | {
       new (): C;
     }
-  | [{ new (): C }, Parameters<C["initial"]>[0]];
+  | [{ new (): C }, Configation<C>];

@@ -81,8 +81,6 @@ export abstract class Entity<
         y: 0,
         x: 0,
       });
-      this.sprite = new ColorSprite();
-      this.sprite.source = [0, 0, 0, 0];
       this.addChild(effect);
 
       setTimeout(() => {
@@ -228,7 +226,9 @@ export abstract class Entity<
   onUpdate() {}
 
   draw() {
-    this.sprite.draw();
+    if (!this.isTerminate) {
+      this.sprite.draw();
+    }
   }
 
   abstract onSpriteWidthHeightBinding(): { width: number; height: number };

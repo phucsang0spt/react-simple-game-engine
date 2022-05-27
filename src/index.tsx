@@ -1,7 +1,5 @@
 export { P5 } from "./classes/p5";
 
-export { createAssetImage, createAssetSound } from "./utils";
-
 export { ParticleSystem } from "./classes/particle-system";
 export { Particle } from "./classes/particle";
 
@@ -13,6 +11,7 @@ export { Entity } from "./classes/entities/entity";
 export { CircleEntity } from "./classes/entities/circle.entity";
 export { RectEntity } from "./classes/entities/rect.entity";
 
+export { Prefab } from "./classes/prefab";
 export { LogicComponent } from "./classes/logic-component";
 export { Scene } from "./classes/scene";
 export { Camera } from "./classes/camera";
@@ -26,6 +25,8 @@ export { SceneTag } from "./decorators/scene-tag.decor";
 export { SceneUI } from "./decorators/scene-ui.decor";
 
 export { ScenesProcess } from "./ui-components/ScenesProcess";
+
+export { createAssetImage, createAssetSound } from "./utils";
 
 export * from "./export-types";
 export * from "./export-interfaces";

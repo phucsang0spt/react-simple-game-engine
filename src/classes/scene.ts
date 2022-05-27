@@ -7,6 +7,8 @@ import { WorldManagement } from "./world-management";
 import { EntitySult } from "./entities/entity-sult";
 
 import { tick } from "../utils";
+import { Prefab } from "./prefab";
+import { Initialler } from "../export-interfaces";
 
 type LoadAssetsListener = (loadedAssets: boolean) => void;
 type EntityPropsChangeListener<V = any> = (value: V) => void;
@@ -20,6 +22,7 @@ export abstract class Scene<UIP = any> {
     string,
     EntityPropsChangeListener[]
   > = {};
+  private readonly prefabs: Prefab[] = [];
 
   public assetsDelay: number = 0;
   public tag: string;
@@ -110,9 +113,22 @@ export abstract class Scene<UIP = any> {
 
   async onLoadAssets() {}
 
+  getPrefab<C extends EntitySult>(Class: {
+    new (...args: any[]): Prefab<C>;
+  }): Prefab<C> {
+    return this.prefabs.find((pf) => pf instanceof Class) as Prefab<C>;
+  }
+
   bootstrap(camera: Camera) {
     this.worldManagement = new WorldManagement(camera, this);
-    const components = this.getComponents(camera);
+    const components = this.getComponents(camera).filter((comp) => {
+      if (comp.isPrefab) {
+        comp.worldManagement = this.worldManagement;
+        this.prefabs.push(comp);
+        return false;
+      }
+      return true;
+    });
     for (const component of components) {
       const entity: EntitySult = component.output({
         worldManagement: this.worldManagement,
