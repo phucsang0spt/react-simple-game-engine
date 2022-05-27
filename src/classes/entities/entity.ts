@@ -16,6 +16,11 @@ import { copyProperties } from "../../utils";
 
 type TimerJobListener = () => void;
 
+type TerminateOptions = {
+  duration?: number;
+  effect: EntitySult | LogicComponent<EntitySult>;
+};
+
 export abstract class Entity<
   P extends Record<string, any> = Record<string, any>
 > extends EntitySult<EntityInitial<Entity>> {
@@ -32,6 +37,7 @@ export abstract class Entity<
       defaultRun: boolean;
     }
   > = {};
+  private isTerminate = false;
 
   public enabledGravity: boolean = true;
   public sound?: Sound;
@@ -59,6 +65,32 @@ export abstract class Entity<
 
   get props() {
     return this._props as P;
+  }
+
+  /**
+   * @param {TerminateOptions} options
+   * #duration: time to disappear from the world in seconds, default: 0.2 seconds
+   * #effect: effect to showing on duration time
+   * @void
+   */
+  terminate(options?: TerminateOptions) {
+    if (options) {
+      const { duration = 0.2, effect } = options;
+      this.isTerminate = true;
+      Body.setVelocity(this.body, {
+        y: 0,
+        x: 0,
+      });
+      this.sprite = new ColorSprite();
+      this.sprite.source = [0, 0, 0, 0];
+      this.addChild(effect);
+
+      setTimeout(() => {
+        this.worldManagement.removeEntity(this);
+      }, duration * 1000);
+    } else {
+      this.worldManagement.removeEntity(this);
+    }
   }
 
   /**
@@ -177,7 +209,9 @@ export abstract class Entity<
   }
 
   update() {
-    this.onUpdate();
+    if (!this.isTerminate) {
+      this.onUpdate();
+    }
     for (const name in this.timerJobListeners) {
       let { timeCounter, interval, job, defaultRun } =
         this.timerJobListeners[name];
