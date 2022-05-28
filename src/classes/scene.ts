@@ -5,10 +5,9 @@ import { LogicComponent } from "./logic-component";
 import { SceneManagement } from "./scene-management";
 import { WorldManagement } from "./world-management";
 import { EntitySult } from "./entities/entity-sult";
+import { Prefab } from "./prefab";
 
 import { tick } from "../utils";
-import { Prefab } from "./prefab";
-import { Initialler } from "../export-interfaces";
 
 type LoadAssetsListener = (loadedAssets: boolean) => void;
 type EntityPropsChangeListener<V = any> = (value: V) => void;
@@ -121,18 +120,16 @@ export abstract class Scene<UIP = any> {
 
   bootstrap(camera: Camera) {
     this.worldManagement = new WorldManagement(camera, this);
-    const components = this.getComponents(camera).filter((comp) => {
-      if (comp.isPrefab) {
-        comp.worldManagement = this.worldManagement;
-        this.prefabs.push(comp);
-        return false;
-      }
-      return true;
-    });
+    const components = this.getComponents(camera);
+
+    let layerIndex = 0;
     for (const component of components) {
-      const entity: EntitySult = component.output({
-        worldManagement: this.worldManagement,
-      });
+      component.worldManagement = this.worldManagement;
+      component.layerIndex = layerIndex++;
+      if (component.isPrefab) {
+        this.prefabs.push(component);
+      }
+      const entity: EntitySult = component.output();
       this.worldManagement.addEntity(entity);
     }
   }

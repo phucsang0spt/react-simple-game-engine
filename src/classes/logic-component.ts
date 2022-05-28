@@ -1,6 +1,5 @@
 import { Initialler } from "../export-interfaces";
 import { Configable, Configation } from "../export-types";
-import { copyProperties } from "../utils";
 import { Entity } from "./entities/entity";
 
 import { EntitySult } from "./entities/entity-sult";
@@ -8,6 +7,7 @@ import { WorldManagement } from "./world-management";
 
 export class LogicComponent<C extends Initialler = Initialler> {
   private _worldManagement!: WorldManagement;
+  layerIndex: number = 0;
   constructor(
     private readonly configale: Configable<C>,
     private readonly _isPrefab?: boolean
@@ -42,6 +42,7 @@ export class LogicComponent<C extends Initialler = Initialler> {
     }
 
     if (c instanceof EntitySult) {
+      c["_layerIndex"] = this.layerIndex; // use _layerIndex to not trigger change index process at this step
       c.preInitial(this._worldManagement);
     }
     if (c instanceof Entity) {
