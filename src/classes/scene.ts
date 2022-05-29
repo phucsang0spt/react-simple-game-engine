@@ -128,9 +128,10 @@ export abstract class Scene<UIP = any> {
       component.layerIndex = layerIndex++;
       if (component.isPrefab) {
         this.prefabs.push(component);
+      } else {
+        const entity: EntitySult = component.output();
+        this.worldManagement.addEntity(entity);
       }
-      const entity: EntitySult = component.output();
-      this.worldManagement.addEntity(entity);
     }
   }
 
