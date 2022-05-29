@@ -20,17 +20,10 @@ export { Sprite } from "./classes/sprites/sprite";
 export { AvatarSprite } from "./classes/sprites/avatar.sprite";
 export { ColorSprite } from "./classes/sprites/color.sprite";
 
-export { Watcher } from "./classes/watcher";
-
 export { EntityTag } from "./decorators/entity-tag.decor";
 export { SceneTag } from "./decorators/scene-tag.decor";
 export { SceneUI } from "./decorators/scene-ui.decor";
 
 export { ScenesProcess } from "./ui-components/ScenesProcess";
-
-export { createAssetImage, createAssetSound } from "./utils";
-
-export * from "./export-types";
-export * from "./export-interfaces";
 
 export { default as Matter } from "matter-js";
