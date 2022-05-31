@@ -5,17 +5,12 @@ import { WorldManagement } from "../world-management";
 
 export abstract class EntitySult<P = any> implements Initialler<P> {
   public camera!: Camera;
-  public readonly tag!: string;
   public readonly id: string = `${Math.random()}-${new Date().getTime()}`;
 
   private _layerIndex: number = 0;
   private _name = this.id;
   private _scene!: Scene;
   private _worldManagement!: WorldManagement;
-
-  constructor() {
-    this.tag = (this as any).constructor.tag;
-  }
 
   abstract update(): void;
   abstract draw(): void;
@@ -71,7 +66,7 @@ export abstract class EntitySult<P = any> implements Initialler<P> {
       this._scene = worldManagement.scene;
       this.camera = worldManagement.camera;
     }
-    console.log(`Active ${this.tag} entity (name : ${this._name})`);
+    console.log(`Active entity (name : ${this._name})`);
     this.onActive();
   }
 

@@ -20,7 +20,6 @@ export { Sprite } from "./classes/sprites/sprite";
 export { AvatarSprite } from "./classes/sprites/avatar.sprite";
 export { ColorSprite } from "./classes/sprites/color.sprite";
 
-export { EntityTag } from "./decorators/entity-tag.decor";
 export { SceneTag } from "./decorators/scene-tag.decor";
 export { SceneUI } from "./decorators/scene-ui.decor";
 
