@@ -26,17 +26,13 @@ export abstract class Entity<
 > extends EntitySult<EntityInitial<Entity>> {
   private _body!: MasterBody;
   private _sprite!: Sprite<any>;
-  private _children: EntitySult[] = [];
   private _props: Partial<P> = {};
-  private timerJobListeners: Record<
-    string,
-    {
-      timeCounter: number;
-      interval: number;
-      job: TimerJobListener;
-      defaultRun: boolean;
-    }
-  > = {};
+  private timerJobListeners: {
+    timeCounter: number;
+    interval: number;
+    job: TimerJobListener;
+    defaultRun: boolean;
+  }[] = [];
   private isTerminate = false;
 
   public enabledGravity: boolean = true;
@@ -57,10 +53,6 @@ export abstract class Entity<
 
   get body() {
     return this._body;
-  }
-
-  get children() {
-    return this._children;
   }
 
   get props() {
@@ -92,44 +84,29 @@ export abstract class Entity<
   }
 
   /**
-   * @param {string} name
    * @param {number} interval in seconds
    * @param {TimerJobListener} job function that run per #interval
    * @void
    */
   onTimer(
-    name: string,
     interval: number,
     job: TimerJobListener,
     defaultRun = false
-  ) {
-    if (!this.timerJobListeners[name]) {
-      this.timerJobListeners[name] = {
-        timeCounter: 0,
-        interval,
-        job,
-        defaultRun,
-      };
-    } else {
-      console.warn(`Job with name ${name} is already assigned`);
-    }
-  }
+  ): () => void {
+    const listener = {
+      timeCounter: 0,
+      interval,
+      job,
+      defaultRun,
+    };
+    this.timerJobListeners.push(listener);
 
-  addChild(target: EntitySult | LogicComponent<EntitySult>) {
-    const entity =
-      target instanceof EntitySult
-        ? target
-        : target.output({ worldManagement: this.worldManagement });
-    this.children.push(entity);
-    this.worldManagement.addEntity(entity);
-  }
-
-  removeChild(entity: EntitySult) {
-    const delIndex = this.children.indexOf(entity);
-    if (delIndex > -1) {
-      this.children.splice(delIndex, 1);
-      this.worldManagement.removeEntity(entity);
-    }
+    return () => {
+      const index = this.timerJobListeners.indexOf(listener);
+      if (index > -1) {
+        this.timerJobListeners.splice(index, 1);
+      }
+    };
   }
 
   createBody(
@@ -210,17 +187,15 @@ export abstract class Entity<
     if (!this.isTerminate) {
       this.onUpdate();
     }
-    for (const name in this.timerJobListeners) {
-      let { timeCounter, interval, job, defaultRun } =
-        this.timerJobListeners[name];
+    for (const jobListener of this.timerJobListeners) {
+      let { timeCounter, interval, job, defaultRun } = jobListener;
       if (defaultRun || timeCounter / 1000 >= interval) {
         timeCounter = 0;
         job();
-        this.timerJobListeners[name].defaultRun = false;
+        jobListener.defaultRun = false;
       }
       timeCounter += Renderer.deltaTime;
-
-      this.timerJobListeners[name].timeCounter = timeCounter;
+      jobListener.timeCounter = timeCounter;
     }
   }
   onUpdate() {}

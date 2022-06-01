@@ -152,9 +152,12 @@ export class WorldManagement {
   removeEntity(entity: EntitySult) {
     if (entity instanceof Entity) {
       World.remove(this.engine.world, entity.body);
-      for (const child of entity.children) {
-        this.removeEntity(child);
-      }
+    }
+    for (const child of entity.children) {
+      this.removeEntity(child);
+    }
+    if (entity.parent) {
+      entity.parent.unChild(entity);
     }
     delete this.entitiesName[entity.name];
     delete this.entitiesHash[entity.id];

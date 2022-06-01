@@ -1,5 +1,6 @@
 import { Initialler } from "../../export-interfaces";
 import { Camera } from "../camera";
+import { LogicComponent } from "../logic-component";
 import { Scene } from "../scene";
 import { WorldManagement } from "../world-management";
 
@@ -11,9 +12,15 @@ export abstract class EntitySult<P = any> implements Initialler<P> {
   private _name = this.id;
   private _scene!: Scene;
   private _worldManagement!: WorldManagement;
+  private _children: EntitySult[] = [];
+  private _parent?: EntitySult;
 
   abstract update(): void;
   abstract draw(): void;
+
+  get children() {
+    return this._children;
+  }
 
   get layerIndex() {
     return this._layerIndex;
@@ -42,12 +49,39 @@ export abstract class EntitySult<P = any> implements Initialler<P> {
     }
   }
 
+  get parent() {
+    return this._parent;
+  }
+
   get scene() {
     return this._scene;
   }
 
   get worldManagement() {
     return this._worldManagement;
+  }
+
+  addChild(target: EntitySult | LogicComponent<EntitySult>) {
+    const entity =
+      target instanceof EntitySult
+        ? target
+        : target.output({ worldManagement: this.worldManagement });
+    entity._parent = this;
+
+    this.children.push(entity);
+    this.worldManagement.addEntity(entity);
+  }
+
+  removeChild(entity: EntitySult) {
+    this.unChild(entity);
+    this.worldManagement.removeEntity(entity);
+  }
+
+  unChild(entity: EntitySult) {
+    const delIndex = this.children.indexOf(entity);
+    if (delIndex > -1) {
+      this.children.splice(delIndex, 1);
+    }
   }
 
   getProperty<T>(name: string): T {
