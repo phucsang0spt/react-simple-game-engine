@@ -132,14 +132,14 @@ export abstract class Scene<UIP = any> {
     this.loadAssetsListener?.(loadedAssets);
   }
 
-  emitEntityPropsChangeListener<V = any>(name: string, value: V) {
+  emitEntityPropsChange<V = any>(name: string, value: V) {
     const listeners = this.entityPropsChangeListeners[name] || [];
     for (const listener of listeners) {
       listener(value);
     }
   }
 
-  onEntityPropsChangeListener<V = any>(
+  onEntityPropsChange<V = any>(
     name: string,
     func: EntityPropsChangeListener<V>
   ) {

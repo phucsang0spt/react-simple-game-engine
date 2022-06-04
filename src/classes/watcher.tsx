@@ -19,7 +19,7 @@ export function Watcher<IV extends Record<string, any> = Record<string, any>>({
 
   useEffect(() => {
     const unsubs = names.map((name) =>
-      scene.onEntityPropsChangeListener(name, (value) => {
+      scene.onEntityPropsChange(name, (value) => {
         setValues((prev) => ({
           ...prev,
           [name]: value,
