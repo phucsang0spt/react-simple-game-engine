@@ -3,10 +3,11 @@ import { Sprite } from "./classes/sprites/sprite";
 
 import type { Body, IChamferableBodyDefinition } from "matter-js";
 import { Initialler } from "./export-interfaces";
+import { Sound } from "./classes/sound";
+import { SoundType } from "./export-enums";
 
 export type { Collection } from "./classes/p5";
 
-export type Sound = HTMLAudioElement;
 export type Avatar = ReturnType<import("./classes/p5").P5["loadImage"]>;
 export type Color = [number, number, number, number?];
 
@@ -46,3 +47,10 @@ export type Configable<C extends Initialler = Initialler> =
       new (): C;
     }
   | [{ new (): C }, Configation<C>];
+
+export type SoundManagement = Record<
+  SoundType,
+  {
+    canPlay: boolean;
+  }
+>;

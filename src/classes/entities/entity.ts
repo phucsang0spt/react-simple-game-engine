@@ -8,11 +8,11 @@ import {
   EntityInitial,
   EntityPrepare,
   MasterBody,
-  Sound,
 } from "../../export-types";
 import { EntitySult } from "./entity-sult";
 import { LogicComponent } from "../logic-component";
 import { copyProperties } from "../../utils";
+import { Sound } from "../sound";
 
 type TimerJobListener = () => void;
 

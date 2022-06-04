@@ -4,6 +4,7 @@ import {
   ReactNode,
   useEffect,
   useMemo,
+  useState,
 } from "react";
 import { Sketch } from "./Sketch";
 
@@ -28,12 +29,15 @@ export function SceneRunner({
   height,
   assetsLoader: AssetsLoader,
 }: SceneRunnerProps) {
+  const [isBootDone, setBootDone] = useState(false);
+
   useEffect(() => {
     current.loadAssets(assetsDelay);
   }, [current, assetsDelay]);
 
   const setup = function (camera: Camera) {
     current.bootstrap(camera);
+    setBootDone(true);
   };
 
   const draw = function () {
@@ -61,7 +65,11 @@ export function SceneRunner({
           zIndex: 2,
         }}
       >
-        <current.UI scene={current} {...current.UIProps} />
+        {isBootDone ? (
+          <current.UI scene={current} {...current.UIProps} />
+        ) : (
+          <div>{/* //todo */}</div>
+        )}
       </div>
     </div>
   ) : (

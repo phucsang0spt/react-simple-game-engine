@@ -7,8 +7,14 @@ import { WorldManagement } from "./world-management";
 import { EntitySult } from "./entities/entity-sult";
 import { Prefab } from "./prefab";
 
-import { tick } from "../utils";
+import { copyProperties, tick } from "../utils";
+import { Sound } from "./sound";
+import { SoundManagement } from "../export-types";
+import { SoundType } from "../export-enums";
 
+type SoundOptionsChangeListener<O extends SoundType> = (
+  options: SoundManagement[O]
+) => void;
 type LoadAssetsListener = (loadedAssets: boolean) => void;
 type EntityPropsChangeListener<V = any> = (value: V) => void;
 
@@ -17,10 +23,14 @@ export abstract class Scene<UIP = any> {
   private worldManagement!: WorldManagement;
   private _loadedAssets!: boolean;
   private loadAssetsListener!: LoadAssetsListener;
-  private entityPropsChangeListeners: Record<
+  private readonly entityPropsChangeListeners: Record<
     string,
     EntityPropsChangeListener[]
   > = {};
+  private readonly soundBackgroundOptionsChangeListeners: SoundOptionsChangeListener<SoundType.BACKGROUND>[] =
+    [];
+  private readonly soundOnceOptionsChangeListeners: SoundOptionsChangeListener<SoundType.ONCE>[] =
+    [];
   private readonly prefabs: Prefab[] = [];
 
   public assetsDelay: number = 0;
@@ -45,9 +55,71 @@ export abstract class Scene<UIP = any> {
     return this.getUIProps();
   }
 
+  get soundBackgroundOptions() {
+    return Sound.Management[SoundType.BACKGROUND];
+  }
+
+  get soundOnceOptions() {
+    return Sound.Management[SoundType.ONCE];
+  }
+
+  set soundBackgroundOptions(options: SoundManagement[SoundType.BACKGROUND]) {
+    copyProperties(Sound.Management[SoundType.BACKGROUND], options);
+    for (const listener of this.soundBackgroundOptionsChangeListeners) {
+      listener(Sound.Management[SoundType.BACKGROUND]);
+    }
+  }
+
+  set soundOnceOptions(options: SoundManagement[SoundType.ONCE]) {
+    copyProperties(Sound.Management[SoundType.ONCE], options);
+    for (const listener of this.soundOnceOptionsChangeListeners) {
+      listener(Sound.Management[SoundType.ONCE]);
+    }
+  }
+
+  onSoundOnceOptionsChange(func: SoundOptionsChangeListener<SoundType.ONCE>) {
+    const listeners = this.soundOnceOptionsChangeListeners;
+    listeners.push(func);
+    return () => {
+      const index = listeners.indexOf(func);
+      if (index > -1) {
+        listeners.splice(index, 1);
+      }
+    };
+  }
+
+  onSoundBackgroundOptionsChange(
+    func: SoundOptionsChangeListener<SoundType.BACKGROUND>
+  ) {
+    const listeners = this.soundBackgroundOptionsChangeListeners;
+    listeners.push(func);
+    return () => {
+      const index = listeners.indexOf(func);
+      if (index > -1) {
+        listeners.splice(index, 1);
+      }
+    };
+  }
+
+  private bootSoundOptions() {
+    const options = this.getSoundOptions();
+    copyProperties(
+      Sound.Management[SoundType.ONCE],
+      options[SoundType.ONCE] || {}
+    );
+    copyProperties(
+      Sound.Management[SoundType.BACKGROUND],
+      options[SoundType.BACKGROUND] || {}
+    );
+  }
+
+  protected getSoundOptions(): Partial<SoundManagement> {
+    return {};
+  }
+
   protected onBorn() {}
 
-  protected getUIProps() {
+  protected getUIProps(): UIP {
     return {} as UIP;
   }
 
@@ -119,6 +191,8 @@ export abstract class Scene<UIP = any> {
   }
 
   bootstrap(camera: Camera) {
+    this.bootSoundOptions();
+
     this.worldManagement = new WorldManagement(camera, this);
     const components = this.getComponents(camera);
 

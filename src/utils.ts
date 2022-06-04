@@ -1,5 +1,7 @@
 import OutofScopeP5 from "p5";
-import { Avatar, Sound } from "./export-types";
+import { Sound } from "./classes/sound";
+import { SoundType } from "./export-enums";
+import { Avatar } from "./export-types";
 
 let outofScopeP5!: OutofScopeP5;
 
@@ -22,16 +24,19 @@ export async function createAssetImage(src: string): Promise<Avatar> {
   });
 }
 
-export async function createAssetSound(src: string): Promise<Sound> {
-  const media = new Audio();
+export async function createAssetSound(
+  src: string,
+  type?: SoundType
+): Promise<Sound> {
+  const media = new Sound(type);
   return new Promise((res, rej) => {
-    media.onloadedmetadata = function () {
+    media.native.onloadedmetadata = function () {
       res(media);
     };
-    media.onerror = function (error) {
+    media.native.onerror = function (error) {
       rej(error);
     };
-    media.src = src;
+    media.native.src = src;
   });
 }
 
