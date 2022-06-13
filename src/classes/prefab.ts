@@ -1,4 +1,4 @@
-import { Configable, Configation } from "../export-types";
+import { Configable } from "../export-types";
 import { EntitySult } from "./entities/entity-sult";
 
 import { LogicComponent } from "./logic-component";

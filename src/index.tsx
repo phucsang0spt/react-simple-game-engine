@@ -1,3 +1,4 @@
+export { Saver } from "./classes/saver";
 export { Sound } from "./classes/sound";
 export { P5 } from "./classes/p5";
 
