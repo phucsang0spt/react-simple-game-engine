@@ -7,9 +7,9 @@ import { WorldManagement } from "./world-management";
 import { EntitySult } from "./entities/entity-sult";
 import { Prefab } from "./prefab";
 
-import { copyProperties, tick } from "../utils";
+import { copyProperties, createAssetSound, tick } from "../utils";
 import { Sound } from "./sound";
-import { SoundManagement } from "../export-types";
+import { GetSoundOptions, SoundDecor, SoundManagement } from "../export-types";
 import { SoundType } from "../export-enums";
 
 type SoundOptionsChangeListener<O extends SoundType> = (
@@ -19,6 +19,8 @@ type LoadAssetsListener = (loadedAssets: boolean) => void;
 type EntityPropsChangeListener<V = any> = (value: V) => void;
 
 export abstract class Scene<UIP = any> {
+  static soundsDecor: SoundDecor[] = [];
+
   private ui: ComponentType<UIP>;
   private worldManagement!: WorldManagement;
   private _loadedAssets!: boolean;
@@ -55,22 +57,24 @@ export abstract class Scene<UIP = any> {
     return this.getUIProps();
   }
 
-  get soundBackgroundOptions() {
+  get soundBackgroundOptions(): SoundManagement[SoundType.BACKGROUND] {
     return Sound.Management[SoundType.BACKGROUND];
   }
 
-  get soundOnceOptions() {
+  get soundOnceOptions(): SoundManagement[SoundType.ONCE] {
     return Sound.Management[SoundType.ONCE];
   }
 
-  set soundBackgroundOptions(options: SoundManagement[SoundType.BACKGROUND]) {
+  set soundBackgroundOptions(
+    options: Partial<SoundManagement[SoundType.BACKGROUND]>
+  ) {
     copyProperties(Sound.Management[SoundType.BACKGROUND], options);
     for (const listener of this.soundBackgroundOptionsChangeListeners) {
       listener(Sound.Management[SoundType.BACKGROUND]);
     }
   }
 
-  set soundOnceOptions(options: SoundManagement[SoundType.ONCE]) {
+  set soundOnceOptions(options: Partial<SoundManagement[SoundType.ONCE]>) {
     copyProperties(Sound.Management[SoundType.ONCE], options);
     for (const listener of this.soundOnceOptionsChangeListeners) {
       listener(Sound.Management[SoundType.ONCE]);
@@ -113,7 +117,7 @@ export abstract class Scene<UIP = any> {
     );
   }
 
-  protected getSoundOptions(): Partial<SoundManagement> {
+  protected getSoundOptions(): GetSoundOptions {
     return {};
   }
 
@@ -162,10 +166,24 @@ export abstract class Scene<UIP = any> {
 
   destructor() {
     this.worldManagement.destructor();
+    for (const { propertyKey } of Scene.soundsDecor) {
+      const sound = (this as any)[propertyKey] as Sound;
+      sound?.stop();
+    }
   }
 
   switchToScene(tag: string) {
     this.manager.gotoScene(tag);
+  }
+
+  async loadSounds() {
+    await Promise.all(
+      Scene.soundsDecor.map(async (decor) => {
+        const sound = await createAssetSound(decor.src, decor.type);
+        sound.volumn = decor.volumn;
+        (this as any)[decor.propertyKey] = sound;
+      })
+    );
   }
 
   async loadAssets(delay?: number) {
@@ -176,7 +194,7 @@ export abstract class Scene<UIP = any> {
     await tick(this.assetsDelay < 0 ? undefined : this.assetsDelay);
 
     this.loadedAssets = false;
-    await this.onLoadAssets().catch((err) => {
+    await Promise.all([this.loadSounds(), this.onLoadAssets()]).catch((err) => {
       console.warn("Load assets fail", err.toString());
     });
     this.loadedAssets = true;

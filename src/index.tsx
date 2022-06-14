@@ -22,6 +22,7 @@ export { Sprite } from "./classes/sprites/sprite";
 export { AvatarSprite } from "./classes/sprites/avatar.sprite";
 export { ColorSprite } from "./classes/sprites/color.sprite";
 
+export { SceneSound } from "./decorators/scene-sound.decor";
 export { SceneTag } from "./decorators/scene-tag.decor";
 export { SceneUI } from "./decorators/scene-ui.decor";
 

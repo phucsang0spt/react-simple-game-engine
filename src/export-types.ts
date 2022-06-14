@@ -52,5 +52,15 @@ export type SoundManagement = Record<
   SoundType,
   {
     canPlay: boolean;
+    loop: boolean;
   }
 >;
+
+export type SoundDecor = {
+  propertyKey: string;
+  src: string;
+  type: SoundType;
+  volumn: number;
+};
+
+export type GetSoundOptions = DeepPartial<SoundManagement>;
