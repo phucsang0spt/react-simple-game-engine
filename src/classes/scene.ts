@@ -7,9 +7,20 @@ import { WorldManagement } from "./world-management";
 import { EntitySult } from "./entities/entity-sult";
 import { Prefab } from "./prefab";
 
-import { copyProperties, createAssetSound, tick } from "../utils";
+import {
+  copyProperties,
+  createAssetImage,
+  createAssetSound,
+  tick,
+} from "../utils";
 import { Sound } from "./sound";
-import { GetSoundOptions, SoundDecor, SoundManagement } from "../export-types";
+import {
+  Avatar,
+  GetSoundOptions,
+  SoundDecor,
+  SoundManagement,
+  SpriteDecor,
+} from "../export-types";
 import { SoundType } from "../export-enums";
 
 type SoundOptionsChangeListener<O extends SoundType> = (
@@ -20,6 +31,7 @@ type EntityPropsChangeListener<V = any> = (value: V) => void;
 
 export abstract class Scene<UIP = any> {
   static soundsDecor: SoundDecor[] = [];
+  static spritesDecor: SpriteDecor[] = [];
 
   private ui: ComponentType<UIP>;
   private worldManagement!: WorldManagement;
@@ -36,6 +48,7 @@ export abstract class Scene<UIP = any> {
   private readonly prefabs: Prefab[] = [];
 
   public readonly sounds: Sound[] = [];
+  public readonly sprites: Avatar[] = [];
   public assetsDelay: number = 0;
   public tag: string;
   public manager!: SceneManagement;
@@ -176,6 +189,18 @@ export abstract class Scene<UIP = any> {
     this.manager.gotoScene(tag);
   }
 
+  private async loadSprites() {
+    await Promise.all(
+      Scene.spritesDecor.map(async (decor) => {
+        if (decor.src) {
+          const sprite = await createAssetImage(decor.src);
+          (this as any)[decor.propertyKey] = sprite;
+          this.sprites.push(sprite);
+        }
+      })
+    );
+  }
+
   private async loadSounds() {
     await Promise.all(
       Scene.soundsDecor.map(async (decor) => {
@@ -192,11 +217,23 @@ export abstract class Scene<UIP = any> {
     );
   }
 
+  async createSprites(...srcables: (string | { src: string })[]) {
+    return Promise.all(
+      srcables.map(async (srcable) => {
+        const { src } =
+          typeof srcable === "string" ? { src: srcable } : srcable;
+        const sprite = await createAssetImage(src);
+        this.sprites.push(sprite);
+        return sprite;
+      })
+    );
+  }
+
   async createSounds(
     ...srcables: (string | { src: string; volumn?: number; type?: SoundType })[]
   ) {
     return Promise.all(
-      srcables.map(async (srcable, index) => {
+      srcables.map(async (srcable) => {
         const {
           volumn,
           src,
@@ -211,6 +248,20 @@ export abstract class Scene<UIP = any> {
         }
         this.sounds.push(sound);
         return sound;
+      })
+    );
+  }
+
+  async mapSprites(...srcs: string[]) {
+    const spritesDecor = Scene.spritesDecor.filter((decor) => !decor.src);
+    await Promise.all(
+      srcs.map(async (src, index) => {
+        const decor = spritesDecor[index];
+        if (decor) {
+          const sprite = await createAssetImage(src);
+          (this as any)[decor.propertyKey] = sprite;
+          this.sprites.push(sprite);
+        }
       })
     );
   }
@@ -240,7 +291,11 @@ export abstract class Scene<UIP = any> {
     await tick(this.assetsDelay < 0 ? undefined : this.assetsDelay);
 
     this.loadedAssets = false;
-    await Promise.all([this.loadSounds(), this.onLoadAssets()]).catch((err) => {
+    await Promise.all([
+      this.loadSounds(),
+      this.loadSprites(),
+      this.onLoadAssets(),
+    ]).catch((err) => {
       console.warn("Load assets fail", err.toString());
     });
     this.loadedAssets = true;

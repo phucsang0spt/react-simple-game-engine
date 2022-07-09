@@ -63,4 +63,9 @@ export type SoundDecor = {
   volumn?: number;
 };
 
+export type SpriteDecor = {
+  propertyKey: string;
+  src?: string;
+};
+
 export type GetSoundOptions = DeepPartial<SoundManagement>;
