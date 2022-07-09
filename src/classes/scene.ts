@@ -35,6 +35,7 @@ export abstract class Scene<UIP = any> {
     [];
   private readonly prefabs: Prefab[] = [];
 
+  public readonly sounds: Sound[] = [];
   public assetsDelay: number = 0;
   public tag: string;
   public manager!: SceneManagement;
@@ -166,9 +167,8 @@ export abstract class Scene<UIP = any> {
 
   destructor() {
     this.worldManagement.destructor();
-    for (const { propertyKey } of Scene.soundsDecor) {
-      const sound = (this as any)[propertyKey] as Sound;
-      sound?.stop();
+    for (const sound of this.sounds) {
+      sound.stop();
     }
   }
 
@@ -176,12 +176,58 @@ export abstract class Scene<UIP = any> {
     this.manager.gotoScene(tag);
   }
 
-  async loadSounds() {
+  private async loadSounds() {
     await Promise.all(
       Scene.soundsDecor.map(async (decor) => {
-        const sound = await createAssetSound(decor.src, decor.type);
-        sound.volumn = decor.volumn;
-        (this as any)[decor.propertyKey] = sound;
+        if (decor.src) {
+          const sound = await createAssetSound(decor.src, decor.type);
+          if (decor.volumn) {
+            sound.volumn = decor.volumn;
+          }
+
+          (this as any)[decor.propertyKey] = sound;
+          this.sounds.push(sound);
+        }
+      })
+    );
+  }
+
+  async createSounds(
+    ...srcables: (string | { src: string; volumn?: number; type?: SoundType })[]
+  ) {
+    return Promise.all(
+      srcables.map(async (srcable, index) => {
+        const {
+          volumn,
+          src,
+          type = SoundType.ONCE,
+        } = typeof srcable === "string"
+          ? { src: srcable, volumn: undefined, type: undefined }
+          : srcable;
+
+        const sound = await createAssetSound(src, type);
+        if (volumn) {
+          sound.volumn = volumn;
+        }
+        this.sounds.push(sound);
+        return sound;
+      })
+    );
+  }
+
+  async mapSounds(...srcs: string[]) {
+    const soundsDecor = Scene.soundsDecor.filter((decor) => !decor.src);
+    await Promise.all(
+      srcs.map(async (src, index) => {
+        const decor = soundsDecor[index];
+        if (decor) {
+          const sound = await createAssetSound(src, decor.type);
+          if (decor.volumn) {
+            sound.volumn = decor.volumn;
+          }
+          (this as any)[decor.propertyKey] = sound;
+          this.sounds.push(sound);
+        }
       })
     );
   }

@@ -58,9 +58,9 @@ export type SoundManagement = Record<
 
 export type SoundDecor = {
   propertyKey: string;
-  src: string;
+  src?: string;
   type: SoundType;
-  volumn: number;
+  volumn?: number;
 };
 
 export type GetSoundOptions = DeepPartial<SoundManagement>;
