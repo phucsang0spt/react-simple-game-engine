@@ -1,0 +1,44 @@
+{
+  "name": "react-simple-game-engine",
+  "version": "0.2.121",
+  "description": "",
+  "main": "lib/index.js",
+  "types": "lib",
+  "repository": "https://github.com/phucsang0spt/react-simple-game-engine",
+  "dependencies": {
+    "@types/matter-js": "^0.17.7",
+    "@types/p5": "^1.4.2",
+    "matter-js": "^0.18.0",
+    "p5": "^1.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^16.7.13",
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "typescript": "^4.4.2"
+  },
+  "scripts": {
+    "build": "rm -rf lib && tsc -p . && cp -R src/ui-components/react-joystick-component lib/ui-components/react-joystick-component"
+  },
+  "files": [
+    "/lib"
+  ],
+  "keywords": [
+    "game engine",
+    "matter.js game",
+    "p5.js game",
+    "matter js game",
+    "p5 js game",
+    "js game",
+    "canvas game",
+    "react game",
+    "react game engine",
+    "react simple game engine",
+    "reactjs game",
+    "reactjs game engine",
+    "joystick game engine",
+    "joystick engine",
+    "joystick",
+    "reactjs simple game engine"
+  ]
+}
