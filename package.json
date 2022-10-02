@@ -1,6 +1,6 @@
 {
   "name": "react-simple-game-engine",
-  "version": "0.2.125",
+  "version": "0.2.126",
   "description": "",
   "main": "lib/index.js",
   "types": "lib",

@@ -510,21 +510,27 @@ export abstract class Scene<UIP = any> {
   protected onUpdate() {}
 
   mouseMove() {
-    this._worldManagement.iterateEntities((entity) => {
-      entity.onMouseMove();
-    });
+    if (this._worldManagement) {
+      this._worldManagement.iterateEntities((entity) => {
+        entity.onMouseMove();
+      });
+    }
   }
 
   mousePressed() {
-    this._worldManagement.iterateEntities((entity) => {
-      entity.onMousePressed();
-    });
+    if (this._worldManagement) {
+      this._worldManagement.iterateEntities((entity) => {
+        entity.onMousePressed();
+      });
+    }
   }
 
   mouseRelease() {
-    this._worldManagement.iterateEntities((entity) => {
-      entity.onMouseRelease();
-    });
+    if (this._worldManagement) {
+      this._worldManagement.iterateEntities((entity) => {
+        entity.onMouseRelease();
+      });
+    }
   }
 
   action() {
