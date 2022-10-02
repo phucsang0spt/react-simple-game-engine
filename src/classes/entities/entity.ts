@@ -261,8 +261,15 @@ export abstract class Entity<
   draw() {
     if (!this.isTerminate) {
       this.sprite.draw();
+      this.onDraw();
     }
   }
+
+  /**
+   * invoke in every frame, this is necessary for draw that need to run in every frame
+   * @void
+   */
+  onDraw() {}
 
   abstract getSpriteWidthHeight(): { width: number; height: number };
 

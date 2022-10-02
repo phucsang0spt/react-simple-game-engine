@@ -1,16 +1,10 @@
 import { AnimationInitialParams } from "../../export-types";
-import { Sprite } from "../sprites/sprite";
-export abstract class AnimationSprite<S extends Sprite<any>> {
+export abstract class AnimationSprite {
   protected currentFrame: number = 0;
   protected _isRunning = true;
   protected timeCounter = 0;
 
-  private _sprite: S;
   private timePerFrame = 200;
-
-  get sprite() {
-    return this._sprite;
-  }
 
   set isRunning(_isRunning: boolean) {
     this._isRunning = _isRunning;

@@ -1,20 +1,20 @@
 import { Initialler } from "../../export-interfaces";
+import { Avatar } from "../../export-types";
 import { copyProperties } from "../../utils";
 import { Sprite } from "../sprites/sprite";
 import { AnimationSprite } from "./animation";
+import { AvatarAnimationSprite } from "./avatar.animation";
 
-type AnimatorInitialParams<O extends Sprite<any> = Sprite<any>> = {
+type AnimatorInitialParams = {
   activeKey: any;
-  states: Record<any, AnimationSprite<O>>;
+  states: Record<any, AnimationSprite>;
 };
 
-export class Animator<O extends Sprite<any> = Sprite<any>>
-  implements Initialler<AnimatorInitialParams<O>>
-{
-  private states: Record<any, AnimationSprite<O>>;
+export class Animator implements Initialler<AnimatorInitialParams> {
+  private states: Record<any, AnimationSprite>;
   private activeKey: any;
 
-  initial(params: AnimatorInitialParams<O>) {
+  initial(params: AnimatorInitialParams) {
     copyProperties(this, params);
   }
 
@@ -22,8 +22,14 @@ export class Animator<O extends Sprite<any> = Sprite<any>>
     for (const key in this.states) {
       if (this.states.hasOwnProperty(key)) {
         const state = this.states[key];
+        if (state instanceof AvatarAnimationSprite) {
+          state.onGetSource = () => sprite.source as Avatar;
+          state.onGetSize = () => ({
+            width: sprite.width,
+            height: sprite.height,
+          });
+        }
         //@ts-ignore,pass check modifier for first initial
-        state._sprite = sprite;
       }
     }
   }

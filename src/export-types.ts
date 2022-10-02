@@ -114,6 +114,8 @@ export type AnimationInitialParams<
   E extends Record<string, any> = Record<string, any>
 > = {
   timePerFrame?: number;
+  source?: Avatar;
+  size?: Size;
 } & E;
 
 export type EntityEdge = {

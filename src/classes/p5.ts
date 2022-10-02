@@ -1,4 +1,5 @@
 import p5 from "p5";
+import { Point } from "../export-types";
 import { Scaler } from "./scaler";
 import { SimpleCamera } from "./simple-camera";
 
@@ -38,6 +39,19 @@ export class P5 extends p5 {
 
   get isForeground() {
     return window.document.visibilityState === "visible";
+  }
+
+  drawHandle(position: Point, onDraw: (p5: P5) => void) {
+    const camera = this.simpleCamera;
+    this.push();
+
+    this.translate(
+      this.width / 2 + position.x - camera.x,
+      this.height / 2 + position.y - camera.y
+    );
+    this.noStroke();
+    onDraw(this);
+    this.pop();
   }
 
   constrainMax(value: number, max: number) {

@@ -2,7 +2,7 @@ import { copyProperties } from "../../utils";
 import { ColorSprite } from "../sprites/color.sprite";
 import { AnimationSprite } from "./animation";
 
-export class ColorAnimationSprite extends AnimationSprite<ColorSprite> {
+export class ColorAnimationSprite extends AnimationSprite {
   private colors: ColorSprite["source"][];
   private maxFrame?: number;
 

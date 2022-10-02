@@ -1,6 +1,5 @@
-import { AnimationInitialParams } from "../../export-types";
+import { AnimationInitialParams, Avatar, Size } from "../../export-types";
 import { copyProperties } from "../../utils";
-import { AvatarSprite } from "../sprites/avatar.sprite";
 import { AnimationSprite } from "./animation";
 
 type Offset = {
@@ -12,8 +11,29 @@ type Offset = {
   maxFrame?: number;
 };
 
-export class AvatarAnimationSprite extends AnimationSprite<AvatarSprite> {
+export class AvatarAnimationSprite extends AnimationSprite {
   private offset: Offset;
+
+  source: Avatar;
+  size: Size;
+
+  onGetSource: () => Avatar;
+  onGetSize: () => Size;
+
+  getSource() {
+    if (this.source) {
+      return this.source;
+    }
+    this.source = this.onGetSource();
+    return this.source;
+  }
+  getSize() {
+    if (this.size) {
+      return this.size;
+    }
+    this.size = this.onGetSize();
+    return this.size;
+  }
 
   initial({
     x = 0,
@@ -40,22 +60,23 @@ export class AvatarAnimationSprite extends AnimationSprite<AvatarSprite> {
     if (maxFrame != null) {
       return this.currentFrame === maxFrame;
     }
-    
+
     return (
       x + this.currentFrame * (width + distancePerFrame) >=
-      this.sprite.source!.width
+      this.getSource().width
     );
   }
 
   onDraw() {
     const { x, y, width, height, distancePerFrame } = this.offset;
+    const size = this.getSize();
     Renderer.image(
-      this.sprite.source!,
+      this.getSource(),
       // position on canvas
       0,
       0,
-      this.sprite.width,
-      this.sprite.height,
+      size.width,
+      size.height,
       //crop on source image
       x + this.currentFrame * (width + distancePerFrame),
       y,
