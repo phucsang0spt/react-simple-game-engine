@@ -30,6 +30,10 @@ class _Saver {
       : console.log("Initial saver fail");
   }
 
+  remove(key: string): void {
+    this.store.removeItem(`${_Saver.STORAGE_PREFIX}${key}`);
+  }
+
   set<V extends any = any>(key: string, value: V): void {
     this.store.setItem(`${_Saver.STORAGE_PREFIX}${key}`, JSON.stringify(value));
   }
