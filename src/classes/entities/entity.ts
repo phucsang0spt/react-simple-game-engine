@@ -45,6 +45,7 @@ export abstract class Entity<
 
   public enabledGravity: boolean = true;
   public sound?: Sound;
+  public onTerminate?: () => void;
 
   abstract get edge(): {
     left: number;
@@ -99,9 +100,11 @@ export abstract class Entity<
       this.addChild(effect);
       setTimeout(() => {
         this.worldManagement.removeEntity(this);
+        this.onTerminate?.();
       }, duration * 1000);
     } else {
       this.worldManagement.removeEntity(this);
+      this.onTerminate?.();
     }
   }
 
