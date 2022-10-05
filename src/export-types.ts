@@ -20,6 +20,11 @@ export type MasterBody = Body & {
   entity: Entity;
 };
 
+export type SensorBody = Body & {
+  sensor: import("./classes/sensor").Sensor;
+  entity: Entity;
+};
+
 export type CreateBodyDefine<
   E extends Record<string, any> = Record<string, any>
 > = {

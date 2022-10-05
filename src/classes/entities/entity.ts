@@ -4,16 +4,19 @@ import { Sprite } from "../sprites/sprite";
 import { ColorSprite } from "../sprites/color.sprite";
 
 import {
+  Color,
   CreateBodyDefine,
   EntityInitial,
   EntityPrepare,
   MasterBody,
   Point,
+  SensorBody,
 } from "../../export-types";
 import { EntitySult } from "./entity-sult";
 import { LogicComponent } from "../logic-component";
-import { copyProperties } from "../../utils";
+import { copyProperties, genId } from "../../utils";
 import { Sound } from "../sound";
+import { Sensor } from "../sensor";
 
 type TimerJobListener = () => void;
 
@@ -29,6 +32,23 @@ type TimerOptions = {
   onRegisterDone?: (time: number) => void;
 };
 
+type AddSensorParams = {
+  name?: string;
+  position?: Point;
+} & (
+  | {
+      shape?: "rect";
+      width: number;
+      height: number;
+      radius?: never;
+    }
+  | {
+      shape: "circle";
+      radius: number;
+      width?: never;
+      height?: never;
+    }
+);
 export abstract class Entity<
   P extends Record<string, any> = Record<string, any>
 > extends EntitySult<EntityInitial<Entity>> {
@@ -43,6 +63,8 @@ export abstract class Entity<
   }[] = [];
   private isTerminate = false;
 
+  public debugSensor: boolean = false;
+  public readonly sensors: Sensor[] = [];
   public enabledGravity: boolean = true;
   public sound?: Sound;
   public onTerminate?: () => void;
@@ -150,6 +172,66 @@ export abstract class Entity<
       onRegisterDone(startFrom ?? new Date().getTime()); //todo: this may not invoke correctly
     }
     return unsub;
+  }
+
+  removeSensor(sensor: Sensor) {
+    const delIndex = this.sensors.indexOf(sensor);
+    if (delIndex > -1) {
+      this.sensors.splice(delIndex);
+      this.worldManagement.removeBody(sensor.body);
+    }
+  }
+
+  /**
+   * @param {Point} position delta position of sensor base on entity position
+   * @param {string} name name of sensor
+   * @param {"rect"|"circle"} shape type of shape of physical body, ex: "rect"|"circle"
+   * @param {number} width width of sensor, apply when in "rect" shape
+   * @param {number} height height of sensor, apply when in "rect" shape
+   * @param {number} radius radius of sensor, apply when in "circle" shape
+   * @param {boolean} debug allow to show sensor for debug purpose, have to enable entity.debugSensor = true first
+   * @param {boolean} debugColor allow to change sensor color
+   * @void
+   */
+  addSensor(
+    { position, name, shape = "rect", width, height, radius }: AddSensorParams,
+    debug: boolean = false,
+    debugColor?: Color
+  ) {
+    name = name || genId();
+
+    const pos = { ...this.position };
+
+    let sensor: Sensor;
+    if (shape === "rect") {
+      sensor = new Sensor(
+        this,
+        name,
+        position || { x: 0, y: 0 },
+        { width, height },
+        shape,
+        Bodies.rectangle(pos.x, pos.y, width, height, {
+          isSensor: true,
+        }) as SensorBody,
+        debug,
+        debugColor
+      );
+    } else {
+      sensor = new Sensor(
+        this,
+        name,
+        position || { x: 0, y: 0 },
+        { width: radius * 2, height: radius * 2 },
+        shape,
+        Bodies.circle(pos.x, pos.y, radius, {
+          isSensor: true,
+        }) as SensorBody,
+        debug,
+        debugColor
+      );
+    }
+    this.sensors.push(sensor);
+    this.worldManagement.addBody(sensor.body);
   }
 
   createBody(
@@ -276,7 +358,11 @@ export abstract class Entity<
 
   abstract getSpriteWidthHeight(): { width: number; height: number };
 
-  onCollision(target: Entity) {}
-  onCollisionEnd(target: Entity) {}
-  onCollisionActive(target: Entity) {}
+  onCollision(target: Entity | Sensor) {}
+  onCollisionEnd(target: Entity | Sensor) {}
+  onCollisionActive(target: Entity | Sensor) {}
+
+  onSensorCollision(sensor: Sensor, target: Entity | Sensor) {}
+  onSensorCollisionEnd(sensor: Sensor, target: Entity | Sensor) {}
+  onSensorCollisionActive(sensor: Sensor, target: Entity | Sensor) {}
 }

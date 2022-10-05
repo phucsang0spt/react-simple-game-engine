@@ -1,12 +1,13 @@
 import { Engine, World, Events, Body } from "matter-js";
 
-import { MasterBody } from "../export-types";
+import { MasterBody, SensorBody } from "../export-types";
 
 import { SimpleCamera } from "./simple-camera";
 import { Scene } from "./scene";
 
 import { Entity } from "./entities/entity";
 import { EntitySult } from "./entities/entity-sult";
+import { Sensor } from "./sensor";
 
 export class WorldManagement {
   private readonly entitiesHash: Record<string, EntitySult> = {};
@@ -40,11 +41,11 @@ export class WorldManagement {
       const pairs = event.pairs;
       for (const pair of pairs) {
         const { bodyA, bodyB } = pair as any as {
-          bodyA: MasterBody;
-          bodyB: MasterBody;
+          bodyA: any;
+          bodyB: any;
         };
-        bodyA.entity.onCollision(bodyB.entity);
-        bodyB.entity.onCollision(bodyA.entity);
+        this.bindCollectionEvent("Collision", bodyA, bodyB);
+        this.bindCollectionEvent("Collision", bodyB, bodyA);
       }
     });
     Events.on(this.engine, "collisionEnd", (event) => {
@@ -54,8 +55,8 @@ export class WorldManagement {
           bodyA: MasterBody;
           bodyB: MasterBody;
         };
-        bodyA.entity.onCollisionEnd(bodyB.entity);
-        bodyB.entity.onCollisionEnd(bodyA.entity);
+        this.bindCollectionEvent("CollisionEnd", bodyA, bodyB);
+        this.bindCollectionEvent("CollisionEnd", bodyB, bodyA);
       }
     });
     Events.on(this.engine, "collisionActive", (event) => {
@@ -65,10 +66,27 @@ export class WorldManagement {
           bodyA: MasterBody;
           bodyB: MasterBody;
         };
-        bodyA.entity.onCollisionActive(bodyB.entity);
-        bodyB.entity.onCollisionActive(bodyA.entity);
+        this.bindCollectionEvent("CollisionActive", bodyA, bodyB);
+        this.bindCollectionEvent("CollisionActive", bodyB, bodyA);
       }
     });
+  }
+
+  private bindCollectionEvent(
+    name: "Collision" | "CollisionEnd" | "CollisionActive",
+    sourceBody: MasterBody | SensorBody,
+    targetBody: MasterBody | SensorBody
+  ) {
+    const targetCol =
+      "sensor" in targetBody ? targetBody.sensor : targetBody.entity;
+
+    if ("sensor" in sourceBody) {
+      //ex: onSensorCollision | onSensorCollisionEnd | onSensorCollisionActive
+      sourceBody.entity[`onSensor${name}`](sourceBody.sensor, targetCol);
+    } else {
+      //ex: onCollision | onCollisionEnd | onCollisionActive
+      sourceBody.entity[`on${name}`](targetCol);
+    }
   }
 
   get engine() {
@@ -159,6 +177,14 @@ export class WorldManagement {
     }
   }
 
+  addBody(body: Body) {
+    World.add(this.engine.world, body);
+  }
+
+  removeBody(body: Body) {
+    World.remove(this.engine.world, body);
+  }
+
   addEntity(entity: EntitySult) {
     this.joinPool(entity.layerIndex, entity);
     this.entitiesHash[entity.id] = entity;
@@ -166,7 +192,7 @@ export class WorldManagement {
 
     if (entity instanceof Entity) {
       if (entity.havePhysicBody) {
-        World.add(this.engine.world, entity.body);
+        this.addBody(entity.body);
       }
     }
     entity.active(this);
@@ -175,7 +201,10 @@ export class WorldManagement {
   removeEntity(entity: EntitySult) {
     if (entity instanceof Entity) {
       if (entity.havePhysicBody) {
-        World.remove(this.engine.world, entity.body);
+        this.removeBody(entity.body);
+      }
+      for (const sensor of entity.sensors) {
+        this.removeBody(sensor.body);
       }
     }
     for (const child of entity.children) {
@@ -193,12 +222,36 @@ export class WorldManagement {
     Engine.update(this.engine);
     this.iterateEntities((entity) => {
       entity.update();
+
+      if (entity instanceof Entity) {
+        const { x: entityX, y: entityY } = entity.position;
+        for (const { body, position } of entity.sensors) {
+          Body.setPosition(body, {
+            x: entityX + position.x,
+            y: entityY + position.y,
+          });
+        }
+      }
     });
   }
 
   draw() {
     this.iterateEntities((entity) => {
       entity.draw();
+
+      if (entity instanceof Entity) {
+        if (entity.debugSensor) {
+          for (const sensor of entity.sensors) {
+            if (sensor.debug) {
+              const { width, height } = sensor.size;
+              Renderer.drawHandle(sensor.body.position, (renderer) => {
+                renderer.fill(sensor.debugColor);
+                renderer.rect(0, 0, width, height);
+              });
+            }
+          }
+        }
+      }
     });
   }
 }
