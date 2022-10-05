@@ -4,10 +4,11 @@ import { LogicComponent } from "../logic-component";
 import { Scene } from "../scene";
 import { WorldManagement } from "../world-management";
 import { P5 } from "../p5";
+import { genId } from "../../utils";
 
 export abstract class EntitySult<P = any> implements Initialler<P> {
   public simpleCamera: SimpleCamera;
-  public readonly id: string = `${Math.random()}-${new Date().getTime()}`;
+  public readonly id: string = genId();
 
   private _layerIndex: number = 0;
   private _name = this.id;
