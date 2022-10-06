@@ -104,7 +104,7 @@ export class WorldManagement {
   iterateEntities(action: (entity: EntitySult) => boolean | undefined | void) {
     const { entitiesPool, entitiesHash } = this;
     const indexes = Object.keys(this.entitiesPool).map((idx) => +idx);
-    indexes.sort();
+    indexes.sort((a, b) => a - b);
 
     for (const index of indexes) {
       const entitiesId = entitiesPool[index];
