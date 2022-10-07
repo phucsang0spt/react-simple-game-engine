@@ -17,6 +17,7 @@ export abstract class EntitySult<P = any> implements Initialler<P> {
   private _children: EntitySult[] = [];
   private _parent?: EntitySult;
   private _renderer: P5;
+  public isVisible: boolean = true;
 
   abstract update(): void;
   abstract draw(): void;

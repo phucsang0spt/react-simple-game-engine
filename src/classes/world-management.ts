@@ -237,7 +237,9 @@ export class WorldManagement {
 
   draw() {
     this.iterateEntities((entity) => {
-      entity.draw();
+      if (entity.isVisible) {
+        entity.draw();
+      }
 
       if (entity instanceof Entity) {
         if (entity.debugSensor) {

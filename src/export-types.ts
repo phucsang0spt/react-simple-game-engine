@@ -44,6 +44,7 @@ export type EntityInitial<E extends Entity> = {
   sprite?: import("./classes/logic-component").LogicComponent<Sprite<any>>;
   sound?: Sound;
   name?: string;
+  isVisible?: boolean;
   //@ts-ignore
   props?: Partial<E["props"]>;
 };
