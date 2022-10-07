@@ -18,6 +18,8 @@ export abstract class EntitySult<P = any> implements Initialler<P> {
   private _parent?: EntitySult;
   private _renderer: P5;
   public isVisible: boolean = true;
+  public scaleX: number = 1;
+  public scaleY: number = 1;
 
   abstract update(): void;
   abstract draw(): void;

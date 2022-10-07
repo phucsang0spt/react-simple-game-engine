@@ -45,6 +45,8 @@ export type EntityInitial<E extends Entity> = {
   sound?: Sound;
   name?: string;
   isVisible?: boolean;
+  scaleX?: number;
+  scaleY?: number;
   //@ts-ignore
   props?: Partial<E["props"]>;
 };

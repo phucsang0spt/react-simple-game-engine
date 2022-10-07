@@ -64,12 +64,13 @@ export abstract class Sprite<SpriteType extends SourceType> {
   }
 
   draw() {
-    const { body, position, havePhysicBody } = this.entity;
+    const { body, position, havePhysicBody, scaleX, scaleY } = this.entity;
 
     Renderer.drawHandle(position, () => {
       if (havePhysicBody) {
         Renderer.rotate(body.angle);
       }
+      Renderer.scale(scaleX, scaleY);
       this.onDraw();
     });
   }
