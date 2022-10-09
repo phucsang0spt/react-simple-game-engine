@@ -1,7 +1,7 @@
 import { SoundType } from "../export-enums";
 import { SoundManagement } from "../export-types";
 
-// cant not Sound extends Audio, because TS complite, make call new Audio like a function
+// cant not Sound extends Audio, because TS compile, make call new Audio like a function
 export class Sound {
   static Management: SoundManagement = {
     [SoundType.ONCE]: {

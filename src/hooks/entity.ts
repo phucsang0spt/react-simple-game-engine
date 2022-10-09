@@ -1,5 +1,5 @@
 import { useContext, useMemo } from "react";
-import { EntitySult } from "../classes/entities/entity-sult";
+import { EntitySuit } from "../classes/entities/entity-suit";
 import { UISceneContext } from "../react-context";
 
 type TargetFind<T> =
@@ -8,7 +8,7 @@ type TargetFind<T> =
       new (): T;
     };
 
-export function useEntity<T extends EntitySult = EntitySult>(
+export function useEntity<T extends EntitySuit = EntitySuit>(
   ...entityClasses: TargetFind<T>[]
 ) {
   const scene = useContext(UISceneContext);

@@ -1,5 +1,5 @@
 import { CSSProperties, ReactNode } from "react";
-import { getClassname } from "../utils";
+import { getClassName } from "../utils";
 
 type FloatContainerProps = {
   style?: CSSProperties;
@@ -9,7 +9,7 @@ type FloatContainerProps = {
 
 export function FloatContainer({ children, style, id }: FloatContainerProps) {
   return (
-    <div className={getClassname("float-container")} style={style}>
+    <div className={getClassName("float-container")} style={style}>
       <div id={id}>{children}</div>
     </div>
   );

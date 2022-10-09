@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import ReactDOM from "react-dom";
-import { getClassname, toText } from "../utils";
+import { getClassName, toText } from "../utils";
 
 export function Logger() {
   const [messages, setMessages] = useState<string[]>([]);
@@ -8,7 +8,7 @@ export function Logger() {
 
   const container = useMemo(() => {
     const c = document.createElement("div");
-    c.className = getClassname("game-logger");
+    c.className = getClassName("game-logger");
     document.body.appendChild(c);
     return c;
   }, []);
@@ -58,11 +58,11 @@ export function Logger() {
 
   return ReactDOM.createPortal(
     messages.length ? (
-      <div className={getClassname("message-stack")}>
-        <div className={getClassname("message-stack-heading")}>
+      <div className={getClassName("message-stack")}>
+        <div className={getClassName("message-stack-heading")}>
           <p onClick={() => setMessages([])}>X Clear</p>
         </div>
-        <div className={getClassname("message-stack-content")} ref={refList}>
+        <div className={getClassName("message-stack-content")} ref={refList}>
           {messages.map((mss, i) => (
             <p key={i}>- {mss}</p>
           ))}

@@ -3,7 +3,7 @@ import { ComponentType, ReactElement } from "react";
 import { LogicComponent } from "./logic-component";
 import { SceneManagement } from "./scene-management";
 import { WorldManagement } from "./world-management";
-import { EntitySult } from "./entities/entity-sult";
+import { EntitySuit } from "./entities/entity-suit";
 import { Prefab } from "./prefab";
 
 import {
@@ -155,7 +155,7 @@ export abstract class Scene<UIP = any> {
 
   protected getComponents(
     simpleCamera: SimpleCamera
-  ): LogicComponent<EntitySult>[] {
+  ): LogicComponent<EntitySuit>[] {
     return [];
   }
 
@@ -310,12 +310,11 @@ export abstract class Scene<UIP = any> {
     }
   }
 
-  createSprites(...srcables: (string | { src: string })[]) {
+  createSprites(...sources: (string | { src: string })[]) {
     return parallel(
-      srcables,
-      async (srcable) => {
-        const { src } =
-          typeof srcable === "string" ? { src: srcable } : srcable;
+      sources,
+      async (source) => {
+        const { src } = typeof source === "string" ? { src: source } : source;
         const sprite = await createAssetImage(src);
         this.sprites.push(sprite);
         return sprite;
@@ -325,17 +324,17 @@ export abstract class Scene<UIP = any> {
   }
 
   async createSounds(
-    ...srcables: (string | { src: string; volume?: number; type?: SoundType })[]
+    ...sources: (string | { src: string; volume?: number; type?: SoundType })[]
   ) {
     const sounds: Sound[] = [];
-    for (const srcable of srcables) {
+    for (const source of sources) {
       const {
         volume,
         src,
         type = SoundType.ONCE,
-      } = typeof srcable === "string"
-        ? { src: srcable, volume: undefined, type: undefined }
-        : srcable;
+      } = typeof source === "string"
+        ? { src: source, volume: undefined, type: undefined }
+        : source;
 
       const sound = await createAssetSound(src, type);
       if (volume) {
@@ -347,10 +346,10 @@ export abstract class Scene<UIP = any> {
     return sounds;
   }
 
-  async mapSprites(...srcs: string[]) {
+  async mapSprites(...sources: string[]) {
     const spritesDecor = this.spritesDecor.filter((decor) => !decor.src);
     await parallel(
-      srcs,
+      sources,
       async (src, { realIndex }) => {
         const decor = spritesDecor[realIndex];
         if (decor) {
@@ -363,11 +362,11 @@ export abstract class Scene<UIP = any> {
     );
   }
 
-  async mapSounds(...srcs: string[]) {
+  async mapSounds(...sources: string[]) {
     const soundsDecor = this.soundsDecor.filter((decor) => !decor.src);
     let index = 0;
     for (const decor of soundsDecor) {
-      const src = srcs[index++];
+      const src = sources[index++];
       const sound = await createAssetSound(src, decor.type);
       if (decor.volume) {
         sound.volume = decor.volume;
@@ -431,14 +430,14 @@ export abstract class Scene<UIP = any> {
       };
       this.loadedAssetsError = errors;
     } else {
-      // when dont have error or skip error
+      // when don't have error or skip error
       this.loadedAssets = true;
     }
   }
 
   async onLoadAssets() {}
 
-  getPrefab<C extends EntitySult>(Class: {
+  getPrefab<C extends EntitySuit>(Class: {
     new (...args: any[]): Prefab<C>;
   }): Prefab<C> {
     return this.prefabs.find((pf) => pf instanceof Class) as Prefab<C>;
@@ -498,7 +497,7 @@ export abstract class Scene<UIP = any> {
       if (component.isPrefab) {
         this.prefabs.push(component);
       } else {
-        const entity: EntitySult = component.output();
+        const entity: EntitySuit = component.output();
         this._worldManagement.addEntity(entity);
       }
     }

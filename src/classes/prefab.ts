@@ -1,12 +1,12 @@
-import { Configable } from "../export-types";
-import { EntitySult } from "./entities/entity-sult";
+import { Configurable } from "../export-types";
+import { EntitySuit } from "./entities/entity-suit";
 
 import { LogicComponent } from "./logic-component";
 
 export class Prefab<
-  C extends EntitySult = EntitySult
+  C extends EntitySuit = EntitySuit
 > extends LogicComponent<C> {
-  constructor(configale: Configable<C>) {
-    super(configale, true);
+  constructor(configurable: Configurable<C>) {
+    super(configurable, true);
   }
 }

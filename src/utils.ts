@@ -1,10 +1,10 @@
-import OutofScopeP5 from "p5";
+import OutOfScopeP5 from "p5";
 import { useEffect, useState } from "react";
 import { Sound } from "./classes/sound";
 import { SoundType } from "./export-enums";
 import { Avatar } from "./export-types";
 
-let outofScopeP5: OutofScopeP5;
+let outOfScopeP5: OutOfScopeP5;
 
 document.addEventListener("DOMContentLoaded", function () {
   const noop = document.createElement("div");
@@ -15,13 +15,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.body.appendChild(noop);
   setTimeout(() => {
-    outofScopeP5 = new OutofScopeP5((skt) => {}, noop);
+    outOfScopeP5 = new OutOfScopeP5((skt) => {}, noop);
   }, 0);
 });
 
 export async function createAssetImage(src: string): Promise<Avatar> {
   return new Promise((res: any, rej) => {
-    outofScopeP5.loadImage(src, res, rej);
+    outOfScopeP5.loadImage(src, res, rej);
   });
 }
 
@@ -142,7 +142,7 @@ export function toText(obj: Record<string, any> | Record<string, any>[]) {
 
 const ENGINE_CLASS_PREFIX = "spt-hc_rsgn_";
 
-export function getClassname(cls: string) {
+export function getClassName(cls: string) {
   return ENGINE_CLASS_PREFIX + cls;
 }
 

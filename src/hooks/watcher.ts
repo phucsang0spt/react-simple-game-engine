@@ -10,7 +10,7 @@ export function useWatcher<
   const [values, setValues] = useState<IV>(initialValues);
 
   useEffect(() => {
-    const unsubs = names.map((name) =>
+    const unSubs = names.map((name) =>
       scene.onEntityPropsChange(name, (value) => {
         setValues((prev) => ({
           ...prev,
@@ -19,8 +19,8 @@ export function useWatcher<
       })
     );
     return () => {
-      for (const unsub of unsubs) {
-        unsub();
+      for (const unSub of unSubs) {
+        unSub();
       }
     };
   }, [...names, scene]);

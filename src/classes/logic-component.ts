@@ -1,15 +1,15 @@
-import { Initialler } from "../export-interfaces";
-import { Configable, Configation } from "../export-types";
+import { Initializer } from "../export-interfaces";
+import { Configurable, Configuration } from "../export-types";
 import { Entity } from "./entities/entity";
 
-import { EntitySult } from "./entities/entity-sult";
+import { EntitySuit } from "./entities/entity-suit";
 import { WorldManagement } from "./world-management";
 
-export class LogicComponent<C extends Initialler = Initialler> {
+export class LogicComponent<C extends Initializer = Initializer> {
   private _worldManagement: WorldManagement;
   layerIndex: number = 0;
   constructor(
-    private readonly configale: Configable<C>,
+    private readonly configurable: Configurable<C>,
     private readonly _isPrefab?: boolean
   ) {}
 
@@ -30,24 +30,24 @@ export class LogicComponent<C extends Initialler = Initialler> {
     ...targetParams
   }: {
     worldManagement?: WorldManagement;
-  } & Configation<C> = {}) {
-    const configale = this.configale;
-    const [Class, params = {}] = Array.isArray(configale)
-      ? configale
-      : [configale];
+  } & Configuration<C> = {}) {
+    const configurable = this.configurable;
+    const [Class, params = {}] = Array.isArray(configurable)
+      ? configurable
+      : [configurable];
     const c = new Class();
 
     if (worldManagement) {
       this.worldManagement = worldManagement;
     }
 
-    if (c instanceof EntitySult) {
+    if (c instanceof EntitySuit) {
       c["_layerIndex"] = this.layerIndex; // use _layerIndex to not trigger change index process at this step
       c.preInitial(this._worldManagement);
     }
     if (c instanceof Entity) {
       const { transform, bodyOptions, props, ...restParams } =
-        params as Configation<Entity>;
+        params as Configuration<Entity>;
       const {
         transform: extraTransform,
         bodyOptions: extraBodyOptions,

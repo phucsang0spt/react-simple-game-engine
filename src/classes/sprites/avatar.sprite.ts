@@ -2,7 +2,7 @@ import { Avatar } from "../../export-types";
 import { copyProperties } from "../../utils";
 import { GetInitialParams, Sprite } from "./sprite";
 
-type SpriteOffet = {
+type SpriteOffset = {
   x: number;
   y: number;
   width: number;
@@ -12,11 +12,11 @@ type SpriteOffet = {
 
 type AvatarGetInitialParams<S extends AvatarSprite> = GetInitialParams<S> & {
   //@ts-ignore
-  offset?: Partial<SpriteOffet>;
+  offset?: Partial<SpriteOffset>;
 };
 
 export class AvatarSprite extends Sprite<Avatar | undefined | null> {
-  private _offset: SpriteOffet = {
+  private _offset: SpriteOffset = {
     x: 0,
     y: 0,
     index: 0,

@@ -1,3 +1,3 @@
-export interface Initialler<P = any> {
+export interface Initializer<P = any> {
   initial: (params: P) => void;
 }

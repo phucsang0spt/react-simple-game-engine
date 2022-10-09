@@ -6,16 +6,15 @@ import { SimpleCamera } from "./simple-camera";
 import { Scene } from "./scene";
 
 import { Entity } from "./entities/entity";
-import { EntitySult } from "./entities/entity-sult";
-import { Sensor } from "./sensor";
+import { EntitySuit } from "./entities/entity-suit";
 
 export class WorldManagement {
-  private readonly entitiesHash: Record<string, EntitySult> = {};
+  private readonly entitiesHash: Record<string, EntitySuit> = {};
   private readonly entitiesPool: Record<
-    EntitySult["layerIndex"],
-    EntitySult["id"][]
+    EntitySuit["layerIndex"],
+    EntitySuit["id"][]
   > = {};
-  private readonly entitiesName: Record<EntitySult["_name"], EntitySult["id"]> =
+  private readonly entitiesName: Record<EntitySuit["_name"], EntitySuit["id"]> =
     {};
 
   private _engine: Engine;
@@ -101,7 +100,7 @@ export class WorldManagement {
     return this._scene;
   }
 
-  iterateEntities(action: (entity: EntitySult) => boolean | undefined | void) {
+  iterateEntities(action: (entity: EntitySuit) => boolean | undefined | void) {
     const { entitiesPool, entitiesHash } = this;
     const indexes = Object.keys(this.entitiesPool).map((idx) => +idx);
     indexes.sort((a, b) => a - b);
@@ -122,12 +121,12 @@ export class WorldManagement {
     }
   }
 
-  private joinPool(index: number, entity: EntitySult) {
+  private joinPool(index: number, entity: EntitySuit) {
     this.entitiesPool[index] = this.entitiesPool[index] || [];
     this.entitiesPool[index].push(entity.id);
   }
 
-  private outPool(entity: EntitySult) {
+  private outPool(entity: EntitySuit) {
     const pool = this.entitiesPool[entity.layerIndex];
     if (!pool) {
       return;
@@ -143,12 +142,12 @@ export class WorldManagement {
     Engine.clear(this.engine);
   }
 
-  changeEntityLayerIndex(entity: EntitySult, newIndex: number) {
+  changeEntityLayerIndex(entity: EntitySuit, newIndex: number) {
     this.outPool(entity);
     this.joinPool(newIndex, entity);
   }
 
-  changeEntityName(entity: EntitySult, newName: string) {
+  changeEntityName(entity: EntitySuit, newName: string) {
     delete this.entitiesName[entity.name];
     this.entitiesName[newName] = entity.id;
   }
@@ -159,21 +158,21 @@ export class WorldManagement {
     });
   }
 
-  getEntity<T extends EntitySult = EntitySult>(
+  getEntity<T extends EntitySuit = EntitySuit>(
     name: string | { new (): T }
   ): T {
     if (typeof name === "string") {
       const id = this.entitiesName[name];
       return this.entitiesHash[id] as T;
     } else {
-      let finded;
+      let found;
       this.iterateEntities((entity) => {
         if (entity instanceof name) {
-          finded = entity;
+          found = entity;
           return true;
         }
       });
-      return finded;
+      return found;
     }
   }
 
@@ -185,7 +184,7 @@ export class WorldManagement {
     World.remove(this.engine.world, body);
   }
 
-  addEntity(entity: EntitySult) {
+  addEntity(entity: EntitySuit) {
     this.joinPool(entity.layerIndex, entity);
     this.entitiesHash[entity.id] = entity;
     this.entitiesName[entity.name] = entity.id;
@@ -198,7 +197,7 @@ export class WorldManagement {
     entity.active(this);
   }
 
-  removeEntity(entity: EntitySult) {
+  removeEntity(entity: EntitySuit) {
     if (entity instanceof Entity) {
       if (entity.havePhysicBody) {
         this.removeBody(entity.body);

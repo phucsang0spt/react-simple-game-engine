@@ -12,7 +12,7 @@ import { Scene } from "../classes/scene";
 import { SimpleCamera } from "../classes/simple-camera";
 import { Scaler } from "../classes/scaler";
 
-import { getClassname, useWindowSize } from "../utils";
+import { getClassName, useWindowSize } from "../utils";
 import { LayoutMode } from "../export-enums";
 import { AssetsFailBehavior } from "../export-types";
 import { UISceneContext } from "../react-context";
@@ -111,7 +111,7 @@ export function SceneRunner({
 
   return (
     <div
-      className={getClassname("game-root")}
+      className={getClassName("game-root")}
       style={{
         width: screenSize.width,
         height: screenSize.height,
@@ -157,7 +157,7 @@ export function SceneRunner({
                   const rendered = current.renderAssetsFail();
                   if (Array.isArray(rendered)) {
                     return (
-                      <div className={getClassname("assets-fail-view")}>
+                      <div className={getClassName("assets-fail-view")}>
                         {rendered.map((item, i) => (
                           <p key={i}>
                             - {item.type}: {item.detail}
@@ -179,7 +179,7 @@ export function SceneRunner({
                   <MovementControl {...(joystick === true ? {} : joystick)} />
                 )}
                 <div
-                  className={getClassname("scene-modal-stack")}
+                  className={getClassName("scene-modal-stack")}
                   id="scene-modal-stack"
                 />
               </UISceneContext.Provider>

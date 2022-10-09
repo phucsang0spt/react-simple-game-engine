@@ -1,9 +1,9 @@
-export function SpriteFrom(srcable?: string | { src?: string }) {
+export function SpriteFrom(source?: string | { src?: string }) {
   return function (target: any, propertyKey: string) {
-    const { src } = srcable
-      ? typeof srcable === "string"
-        ? { src: srcable }
-        : srcable
+    const { src } = source
+      ? typeof source === "string"
+        ? { src: source }
+        : source
       : { src: undefined };
 
     if (!target.spritesDecor) {

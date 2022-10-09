@@ -1,5 +1,5 @@
 import p5 from "p5";
-import { Initialler } from "../export-interfaces";
+import { Initializer } from "../export-interfaces";
 import { Avatar, Color } from "../export-types";
 import { copyProperties } from "../utils";
 import { SimpleCamera } from "./simple-camera";
@@ -17,7 +17,7 @@ export type ParticleInitialParams = {
 
 export class Particle
   extends p5.Vector
-  implements Initialler<ParticleInitialParams>
+  implements Initializer<ParticleInitialParams>
 {
   private vec: p5.Vector = Renderer.createVector(); //velocity
   private acc: p5.Vector = Renderer.createVector(); //acceleration

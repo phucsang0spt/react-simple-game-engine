@@ -12,7 +12,7 @@ import {
   Point,
   SensorBody,
 } from "../../export-types";
-import { EntitySult } from "./entity-sult";
+import { EntitySuit } from "./entity-suit";
 import { LogicComponent } from "../logic-component";
 import { copyProperties, genId } from "../../utils";
 import { Sound } from "../sound";
@@ -22,7 +22,7 @@ type TimerJobListener = () => void;
 
 type TerminateOptions = {
   duration?: number;
-  effect: EntitySult | LogicComponent<EntitySult>;
+  effect: EntitySuit | LogicComponent<EntitySuit>;
 };
 
 type TimerOptions = {
@@ -51,7 +51,7 @@ type AddSensorParams = {
 );
 export abstract class Entity<
   P extends Record<string, any> = Record<string, any>
-> extends EntitySult<EntityInitial<Entity>> {
+> extends EntitySuit<EntityInitial<Entity>> {
   private _body: MasterBody | { position: Point; entity: Entity };
   private _sprite: Sprite<any>;
   private _props: Partial<P> = {};

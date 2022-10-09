@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { SceneManagement, SceneClass } from "../classes/scene-management";
-import { getClassname } from "../utils";
+import { getClassName } from "../utils";
 import { Logger } from "./logger";
 import { SceneRunner, SceneRunnerPublicProps } from "./scene-runner";
 
@@ -46,24 +46,24 @@ export function GameBootstrap({ logPopup, scenes, ...props }: WorldViewProps) {
 
     document.head.appendChild(style);
 
-    const gameRootClass = getClassname("game-root");
-    const gameLoggerClass = getClassname("game-logger");
+    const gameRootClass = getClassName("game-root");
+    const gameLoggerClass = getClassName("game-logger");
     style.appendChild(
       document.createTextNode(`
-          .${getClassname("assets-fail-view")}{
+          .${getClassName("assets-fail-view")}{
             background-color: #f28181a1;
             min-height: 100px;
             padding: 10px;
             color: #000;
           }
           
-          .${getClassname("game-modal")} {
+          .${getClassName("game-modal")} {
             position: fixed;
             top: 0;
             left: 0;
           }
 
-          .${getClassname("scene-modal-stack")}{
+          .${getClassName("scene-modal-stack")}{
             position: absolute;
             top: 0;
             left: 0;
@@ -72,20 +72,20 @@ export function GameBootstrap({ logPopup, scenes, ...props }: WorldViewProps) {
             z-index: 2;
           }
           
-          .${getClassname("modal-content-main")}{
+          .${getClassName("modal-content-main")}{
             position: relative;
             z-index: 1;
             min-width: 200px;
             min-height: 200px;
           }
 
-          .${getClassname("modal-content-closer")}{
+          .${getClassName("modal-content-closer")}{
             width: 100%;
             height: 100%;
             position: absolute;
             z-index: 0;
           }
-          .${getClassname("modal-content-centered")}{
+          .${getClassName("modal-content-centered")}{
             width: 100%;
             height: 100%;
             position: relative;
@@ -94,7 +94,7 @@ export function GameBootstrap({ logPopup, scenes, ...props }: WorldViewProps) {
             justify-content: center;
           }
 
-          .${getClassname("modal-content-wrap")}{
+          .${getClassName("modal-content-wrap")}{
             width: 100%;
             height: 100%;
             position: fixed;
@@ -128,7 +128,7 @@ export function GameBootstrap({ logPopup, scenes, ...props }: WorldViewProps) {
             right:0;
           }
 
-          .${getClassname("message-stack")} {
+          .${getClassName("message-stack")} {
               width: cacl(100vw - 40px);
               max-width: 300px;
               max-height: calc(50vh - 50px);
@@ -146,13 +146,13 @@ export function GameBootstrap({ logPopup, scenes, ...props }: WorldViewProps) {
               flex-direction: column;
           }
 
-          .${getClassname("message-stack-heading")}{
+          .${getClassName("message-stack-heading")}{
             width: 100%;
             display: flex;
             justify-content: flex-end;
           }
 
-          .${getClassname("message-stack-content")}{
+          .${getClassName("message-stack-content")}{
             flex: 1;
             width: 100%;
             overflow-x: hidden;
@@ -160,7 +160,7 @@ export function GameBootstrap({ logPopup, scenes, ...props }: WorldViewProps) {
           }
 
 
-          .${getClassname("float-container")} {
+          .${getClassName("float-container")} {
             position: absolute;
             top: 0;
             left: 0;
@@ -168,18 +168,18 @@ export function GameBootstrap({ logPopup, scenes, ...props }: WorldViewProps) {
             bottom: 0;
           }
 
-          .${getClassname("float-container")} > div {
+          .${getClassName("float-container")} > div {
             position: relative;
             width: 100%;
             height: 100%;
           }
 
-          .${getClassname("ui-control")} {
+          .${getClassName("ui-control")} {
             position: absolute;
             display: inline-flex;
           }
 
-          .${getClassname("scaler-container")} {
+          .${getClassName("scaler-container")} {
             width: 100%;
             height: 100%;
             position: relative;
@@ -187,7 +187,7 @@ export function GameBootstrap({ logPopup, scenes, ...props }: WorldViewProps) {
             left: 0;
           }
 
-          .${getClassname("scaler-container")} > div {
+          .${getClassName("scaler-container")} > div {
             transform-origin: left top;
             position: relative;
             top: 50%;

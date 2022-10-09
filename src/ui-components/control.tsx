@@ -1,6 +1,6 @@
 import { ReactNode, useMemo } from "react";
 import { useLongPress, UseLongPressProps } from "../hooks/interact";
-import { getClassname } from "../utils";
+import { getClassName } from "../utils";
 
 export type ControlProps = {
   top?: number;
@@ -41,7 +41,7 @@ export function Control({
 
   return (
     <div
-      className={getClassname("ui-control")}
+      className={getClassName("ui-control")}
       style={{
         top,
         left,

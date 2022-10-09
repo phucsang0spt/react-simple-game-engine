@@ -2,7 +2,7 @@ import { Entity } from "./classes/entities/entity";
 import { Sprite } from "./classes/sprites/sprite";
 
 import type { Body, IChamferableBodyDefinition } from "matter-js";
-import { Initialler } from "./export-interfaces";
+import { Initializer } from "./export-interfaces";
 import { Sound } from "./classes/sound";
 import { SoundType } from "./export-enums";
 
@@ -51,13 +51,13 @@ export type EntityInitial<E extends Entity> = {
   props?: Partial<E["props"]>;
 };
 
-export type Configation<C extends Initialler> = Parameters<C["initial"]>[0];
+export type Configuration<C extends Initializer> = Parameters<C["initial"]>[0];
 
-export type Configable<C extends Initialler = Initialler> =
+export type Configurable<C extends Initializer = Initializer> =
   | {
       new (): C;
     }
-  | [{ new (): C }, Configation<C>];
+  | [{ new (): C }, Configuration<C>];
 
 export type SoundManagement = Record<
   SoundType,

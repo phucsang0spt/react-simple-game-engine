@@ -1,4 +1,4 @@
-import { Initialler } from "../../export-interfaces";
+import { Initializer } from "../../export-interfaces";
 import { SimpleCamera } from "../simple-camera";
 import { LogicComponent } from "../logic-component";
 import { Scene } from "../scene";
@@ -6,7 +6,7 @@ import { WorldManagement } from "../world-management";
 import { P5 } from "../p5";
 import { genId } from "../../utils";
 
-export abstract class EntitySult<P = any> implements Initialler<P> {
+export abstract class EntitySuit<P = any> implements Initializer<P> {
   public simpleCamera: SimpleCamera;
   public readonly id: string = genId();
 
@@ -14,8 +14,8 @@ export abstract class EntitySult<P = any> implements Initialler<P> {
   private _name = this.id;
   private _scene: Scene;
   private _worldManagement: WorldManagement;
-  private _children: EntitySult[] = [];
-  private _parent?: EntitySult;
+  private _children: EntitySuit[] = [];
+  private _parent?: EntitySuit;
   private _renderer: P5;
   public isVisible: boolean = true;
   public scaleX: number = 1;
@@ -88,8 +88,8 @@ export abstract class EntitySult<P = any> implements Initialler<P> {
     return this._worldManagement;
   }
 
-  addChild(target: EntitySult | LogicComponent<EntitySult>) {
-    const entity = target instanceof EntitySult ? target : target.output();
+  addChild(target: EntitySuit | LogicComponent<EntitySuit>) {
+    const entity = target instanceof EntitySuit ? target : target.output();
     entity._parent = this;
     entity._layerIndex = this._layerIndex;
 
@@ -97,12 +97,12 @@ export abstract class EntitySult<P = any> implements Initialler<P> {
     this.worldManagement.addEntity(entity);
   }
 
-  removeChild(entity: EntitySult) {
+  removeChild(entity: EntitySuit) {
     this.unChild(entity);
     this.worldManagement.removeEntity(entity);
   }
 
-  unChild(entity: EntitySult) {
+  unChild(entity: EntitySuit) {
     const delIndex = this.children.indexOf(entity);
     if (delIndex > -1) {
       this.children.splice(delIndex, 1);

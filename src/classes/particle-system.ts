@@ -1,7 +1,7 @@
 import p5 from "p5";
 import { copyProperties } from "../utils";
 import { Particle, ParticleInitialParams } from "./particle";
-import { EntitySult } from "./entities/entity-sult";
+import { EntitySuit } from "./entities/entity-suit";
 
 type ParticleClass = {
   new (...args: ConstructorParameters<typeof Particle>): Particle;
@@ -23,7 +23,7 @@ type ParticleSystemInitialParams = {
   forces?: p5.Vector[];
 };
 
-export class ParticleSystem extends EntitySult<ParticleSystemInitialParams> {
+export class ParticleSystem extends EntitySuit<ParticleSystemInitialParams> {
   private particles: Particle[] = [];
   private forces: p5.Vector[] = [];
   private particleOptions: ParticleOptions = {

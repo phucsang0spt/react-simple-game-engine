@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { getClassname } from "../utils";
+import { getClassName } from "../utils";
 
 type ScalerContainerProps = {
   width: number;
@@ -15,7 +15,7 @@ export function ScalerContainer({
   children,
 }: ScalerContainerProps) {
   return (
-    <div className={getClassname("scaler-container")}>
+    <div className={getClassName("scaler-container")}>
       <div
         style={{
           width,

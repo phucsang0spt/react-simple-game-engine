@@ -1,14 +1,14 @@
 import { SoundType } from "../export-enums";
 
 export function SoundFrom(
-  srcable?: string | { src?: string; volume?: number },
+  source?: string | { src?: string; volume?: number },
   type: SoundType = SoundType.ONCE
 ) {
   return function (target: any, propertyKey: string) {
-    const { volume, src } = srcable
-      ? typeof srcable === "string"
-        ? { src: srcable, volume: undefined }
-        : srcable
+    const { volume, src } = source
+      ? typeof source === "string"
+        ? { src: source, volume: undefined }
+        : source
       : { volume: undefined, src: undefined };
 
     if (!target.soundsDecor) {

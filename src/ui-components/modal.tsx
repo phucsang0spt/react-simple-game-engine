@@ -12,7 +12,7 @@ import {
   memo,
 } from "react";
 import * as ReactDOM from "react-dom";
-import { getClassname } from "../utils";
+import { getClassName } from "../utils";
 
 type ModalProps = {
   children?: ReactElement;
@@ -43,7 +43,7 @@ export const Modal = forwardRef<RefModalFunctions, ModalProps>(function (
 
   const container = useMemo(() => {
     const c = document.createElement("div");
-    c.className = getClassname("game-modal");
+    c.className = getClassName("game-modal");
     return c;
   }, []);
 
@@ -143,16 +143,16 @@ const ModalWrap = memo(function ({
   }, [content]);
 
   return (
-    <div className={getClassname("modal-content-wrap")}>
-      <div className={getClassname("modal-content-centered")} ref={refModal}>
+    <div className={getClassName("modal-content-wrap")}>
+      <div className={getClassName("modal-content-centered")} ref={refModal}>
         <div
-          className={getClassname("modal-content-closer")}
+          className={getClassName("modal-content-closer")}
           style={{
             ...backgroundStyle,
           }}
           onClick={handleClose}
         />
-        <main className={getClassname("modal-content-main")}>{el}</main>
+        <main className={getClassName("modal-content-main")}>{el}</main>
       </div>
     </div>
   );

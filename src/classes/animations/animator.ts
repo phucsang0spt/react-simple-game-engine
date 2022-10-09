@@ -1,4 +1,4 @@
-import { Initialler } from "../../export-interfaces";
+import { Initializer } from "../../export-interfaces";
 import { Avatar } from "../../export-types";
 import { copyProperties } from "../../utils";
 import { Sprite } from "../sprites/sprite";
@@ -10,7 +10,7 @@ type AnimatorInitialParams = {
   states: Record<any, AnimationSprite>;
 };
 
-export class Animator implements Initialler<AnimatorInitialParams> {
+export class Animator implements Initializer<AnimatorInitialParams> {
   private states: Record<any, AnimationSprite>;
   private activeKey: any;
 

@@ -81,11 +81,11 @@ export class P5 extends p5 {
       0
     );
     if (totalPercentsOfRestItems > 1) {
-      const overmax = totalPercentsOfRestItems - 1;
+      const overMax = totalPercentsOfRestItems - 1;
       const avg = 1 / restItems.length;
       for (const item of restItems) {
         if (item[1]! > avg) {
-          item[1]! -= overmax;
+          item[1]! -= overMax;
         }
       }
       totalPercentsOfRestItems = 1;
