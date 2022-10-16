@@ -4,6 +4,7 @@ import { MasterBody, SensorBody } from "../export-types";
 
 import { SimpleCamera } from "./simple-camera";
 import { Scene } from "./scene";
+import { LogicComponent } from "./logic-component";
 
 import { Entity } from "./entities/entity";
 import { EntitySuit } from "./entities/entity-suit";
@@ -184,7 +185,8 @@ export class WorldManagement {
     World.remove(this.engine.world, body);
   }
 
-  addEntity(entity: EntitySuit) {
+  addEntity(target: EntitySuit | LogicComponent<EntitySuit>) {
+    const entity = target instanceof EntitySuit ? target : target.output();
     this.joinPool(entity.layerIndex, entity);
     this.entitiesHash[entity.id] = entity;
     this.entitiesName[entity.name] = entity.id;
