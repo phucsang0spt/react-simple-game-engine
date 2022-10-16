@@ -124,6 +124,8 @@ export type AnimationInitialParams<
   timePerFrame?: number;
   source?: Avatar;
   size?: Size;
+  maxCycle?: number;
+  isRunning?: boolean;
 } & E;
 
 export type EntityEdge = {

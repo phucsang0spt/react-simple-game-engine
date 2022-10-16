@@ -5,6 +5,8 @@ export abstract class AnimationSprite {
   protected timeCounter = 0;
 
   private timePerFrame = 200;
+  private maxCycle = 0;
+  private cycleCounter = 1;
 
   set isRunning(_isRunning: boolean) {
     this._isRunning = _isRunning;
@@ -12,6 +14,7 @@ export abstract class AnimationSprite {
       // stop
       this.timeCounter = 0;
       this.currentFrame = 0;
+      this.cycleCounter = 1;
     }
   }
 
@@ -20,9 +23,17 @@ export abstract class AnimationSprite {
   draw() {
     if (this.checkFrameMax()) {
       this.currentFrame = 0;
+      this.cycleCounter++;
     }
 
     this.onDraw();
+
+    // if max cycle = 0, then don't care about counter, just infinite
+    if (this.maxCycle) {
+      if (this.cycleCounter > this.maxCycle) {
+        this.isRunning = false;
+      }
+    }
 
     if (this.timeCounter >= this.timePerFrame) {
       this.timeCounter = 0;

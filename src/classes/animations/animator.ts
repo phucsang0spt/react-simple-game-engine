@@ -29,7 +29,6 @@ export class Animator implements Initializer<AnimatorInitialParams> {
             height: sprite.height,
           });
         }
-        //@ts-ignore,pass check modifier for first initial
       }
     }
   }
