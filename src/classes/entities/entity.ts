@@ -23,6 +23,7 @@ type TimerJobListener = () => void;
 type TerminateOptions = {
   duration?: number;
   effect?: EntitySuit | LogicComponent<EntitySuit>;
+  keepVisible?: boolean;
 };
 
 type TimerOptions = {
@@ -61,7 +62,8 @@ export abstract class Entity<
     job: TimerJobListener;
     defaultRun: boolean;
   }[] = [];
-  private isTerminate = false;
+  private _isTerminate = false;
+  private keepVisible = false;
 
   public debugSensor: boolean = false;
   public readonly sensors: Sensor[] = [];
@@ -75,6 +77,10 @@ export abstract class Entity<
     top: number;
     bottom: number;
   };
+
+  get isTerminate() {
+    return this._isTerminate;
+  }
 
   set sprite(sprite: Sprite<any>) {
     this._sprite = sprite;
@@ -104,14 +110,15 @@ export abstract class Entity<
 
   /**
    * @param {TerminateOptions} options
-   * #duration: time to disappear from the world in seconds, default: 0.2 seconds
+   * #duration: time to disappear from the world in milliseconds, default: 200 milliseconds
    * #effect: effect to showing on duration time
    * @void
    */
   terminate(options?: TerminateOptions) {
     if (options) {
-      const { duration = 0.2, effect } = options;
-      this.isTerminate = true;
+      const { duration = 200, effect, keepVisible = false } = options;
+      this._isTerminate = true;
+      this.keepVisible = keepVisible;
       if (this.havePhysicBody) {
         Body.setVelocity(this.body, {
           y: 0,
@@ -125,7 +132,7 @@ export abstract class Entity<
       setTimeout(() => {
         this.worldManagement.removeEntity(this);
         this.onTerminate?.();
-      }, duration * 1000);
+      }, duration);
     } else {
       this.worldManagement.removeEntity(this);
       this.onTerminate?.();
@@ -332,7 +339,7 @@ export abstract class Entity<
   }
 
   update() {
-    if (!this.isTerminate) {
+    if (!this._isTerminate) {
       this.onUpdate();
     }
     for (const jobListener of this.timerJobListeners) {
@@ -354,9 +361,14 @@ export abstract class Entity<
   onUpdate() {}
 
   draw() {
-    if (!this.isTerminate) {
+    if (!this._isTerminate) {
       this.sprite.draw();
       this.onDraw();
+    } else {
+      if (this.keepVisible) {
+        this.sprite.draw();
+        this.onDraw();
+      }
     }
   }
 
