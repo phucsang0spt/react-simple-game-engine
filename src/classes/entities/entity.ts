@@ -22,7 +22,7 @@ type TimerJobListener = () => void;
 
 type TerminateOptions = {
   duration?: number;
-  effect: EntitySuit | LogicComponent<EntitySuit>;
+  effect?: EntitySuit | LogicComponent<EntitySuit>;
 };
 
 type TimerOptions = {
@@ -119,7 +119,9 @@ export abstract class Entity<
         });
       }
 
-      this.addChild(effect);
+      if (effect) {
+        this.addChild(effect);
+      }
       setTimeout(() => {
         this.worldManagement.removeEntity(this);
         this.onTerminate?.();
@@ -131,7 +133,7 @@ export abstract class Entity<
   }
 
   /**
-   * @param {number} interval in seconds
+   * @param {number} interval in milliseconds
    * @param {TimerJobListener} job function that run per #interval
    * @param {TimerOptions} options
    * @void
@@ -145,7 +147,10 @@ export abstract class Entity<
       startFrom,
       onRegisterDone,
     }: TimerOptions = {}
-  ): () => void {
+  ): {
+    remove: () => void;
+    reset: () => void;
+  } {
     const listener = {
       timeCounter: startFrom != null ? new Date().getTime() - startFrom : 0,
       interval,
@@ -154,7 +159,7 @@ export abstract class Entity<
     };
     this.timerJobListeners.push(listener);
 
-    const unsub = () => {
+    const unSub = () => {
       const index = this.timerJobListeners.indexOf(listener);
       if (index > -1) {
         this.timerJobListeners.splice(index, 1);
@@ -164,14 +169,19 @@ export abstract class Entity<
     if (once) {
       listener.job = () => {
         job();
-        unsub();
+        unSub();
       };
     }
 
     if (onRegisterDone) {
       onRegisterDone(startFrom ?? new Date().getTime()); //todo: this may not invoke correctly
     }
-    return unsub;
+    return {
+      remove: unSub,
+      reset: () => {
+        listener.timeCounter = 0;
+      },
+    };
   }
 
   removeSensor(sensor: Sensor) {
@@ -314,7 +324,7 @@ export abstract class Entity<
   protected abstract onInitial(): EntityInitial<this>;
 
   /**
-   * invoke before entity setup completed, this is need to provide infomation of name, sprite, animation, animator, transform,...
+   * invoke before entity setup completed, this is need to provide information of name, sprite, animation, animator, transform,...
    * @void
    */
   protected onPrepare(): EntityPrepare<this> {
@@ -327,7 +337,7 @@ export abstract class Entity<
     }
     for (const jobListener of this.timerJobListeners) {
       let { timeCounter, interval, job, defaultRun } = jobListener;
-      if (defaultRun || timeCounter / 1000 >= interval) {
+      if (defaultRun || timeCounter >= interval) {
         timeCounter = 0;
         job();
         jobListener.defaultRun = false;
