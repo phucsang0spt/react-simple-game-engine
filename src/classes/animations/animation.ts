@@ -1,5 +1,7 @@
 import { AnimationInitialParams } from "../../export-types";
 export abstract class AnimationSprite {
+  onCompletedCycle?: (info: { timeCounter: number }) => void;
+
   protected currentFrame: number = 0;
   protected _isRunning = true;
   protected timeCounter = 0;
@@ -35,6 +37,7 @@ export abstract class AnimationSprite {
     // if max cycle = 0, then don't care about counter, just infinite
     if (this.maxCycle) {
       if (this.cycleCounter > this.maxCycle) {
+        this.onCompletedCycle?.({ timeCounter: this.timeCounter });
         this.isRunning = false;
       }
     }
