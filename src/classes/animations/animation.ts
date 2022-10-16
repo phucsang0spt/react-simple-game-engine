@@ -8,6 +8,10 @@ export abstract class AnimationSprite {
   private maxCycle = 0;
   private cycleCounter = 1;
 
+  get isRunning() {
+    return this._isRunning;
+  }
+
   set isRunning(_isRunning: boolean) {
     this._isRunning = _isRunning;
     if (!_isRunning) {
