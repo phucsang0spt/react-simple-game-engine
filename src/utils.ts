@@ -156,3 +156,24 @@ export function genId(length = 12) {
   }
   return result;
 }
+
+export function getPlatform() {
+  const navigator = window.navigator as any;
+  if (navigator) {
+    var platform;
+    if (navigator.userAgentData?.platform) {
+      platform = navigator.userAgentData.platform;
+    } else {
+      platform = navigator.platform;
+    }
+    return platform;
+  }
+  return "unknown";
+}
+
+export function isRealPhone() {
+  const _isRealPhone = /Android|webOS|iPhone|iPad|iPod|Opera Mini/i.test(
+    getPlatform()
+  );
+  return _isRealPhone;
+}

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
+import { isRealPhone } from "../utils";
 
 export type UseLongPressProps = {
   onLongPress: () => void | undefined;
@@ -23,11 +24,13 @@ export function useLongPress(
     };
   }, []);
 
+  const isPhone = useMemo(() => isRealPhone(), []);
+
   return useMemo(() => {
     const callOnPress: { func?: () => void } = {
       func: undefined,
     };
-    return {
+    const interact = {
       onMouseDown: () => {
         callOnPress.func = onPress;
         refTimer.current = setTimeout(() => {
@@ -40,5 +43,12 @@ export function useLongPress(
         clearTimeout(refTimer.current);
       },
     };
-  }, [delay, onPress]);
+    if (isPhone) {
+      return {
+        onTouchStart: interact.onMouseDown,
+        onTouchEnd: interact.onMouseUp,
+      };
+    }
+    return interact;
+  }, [delay, onPress, isPhone]);
 }

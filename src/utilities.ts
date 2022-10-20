@@ -8,4 +8,4 @@ export * from "./hooks/watcher";
 export * from "./hooks/entity";
 export * from "./hooks/scene";
 
-export { genId } from "./utils";
+export { genId, isRealPhone, getPlatform } from "./utils";
