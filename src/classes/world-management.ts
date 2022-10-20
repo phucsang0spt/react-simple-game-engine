@@ -24,16 +24,32 @@ export class WorldManagement {
     this._engine = Engine.create();
     Events.on(this.engine, "beforeUpdate", () => {
       const gravity = this.engine.gravity;
-      this.iterateEntities((entity) => {
-        if (
-          entity instanceof Entity &&
-          entity.havePhysicBody &&
-          !entity.enabledGravity
-        ) {
-          Body.applyForce(entity.body, entity.position, {
-            x: -gravity.x * gravity.scale * entity.body.mass,
-            y: -gravity.y * gravity.scale * entity.body.mass,
-          });
+      const negativeGravityScale = {
+        x: -gravity.x * gravity.scale,
+        y: -gravity.y * gravity.scale,
+      };
+
+      this.iterateEntities((target) => {
+        if (target instanceof Entity) {
+          if (target.havePhysicBody && !target.enabledGravity) {
+            const targetBody = target.body;
+            Body.applyForce(targetBody, targetBody.position, {
+              x: negativeGravityScale.x * targetBody.mass,
+              y: negativeGravityScale.y * targetBody.mass,
+            });
+          }
+
+          const { x: entityX, y: entityY } = target.position;
+          for (const { body, relativePosition } of target.sensors) {
+            Body.setPosition(body, {
+              x: entityX + relativePosition.x,
+              y: entityY + relativePosition.y,
+            });
+            Body.applyForce(body, body.position, {
+              x: negativeGravityScale.x * body.mass,
+              y: negativeGravityScale.y * body.mass,
+            });
+          }
         }
       });
     });
@@ -223,16 +239,6 @@ export class WorldManagement {
     Engine.update(this.engine);
     this.iterateEntities((entity) => {
       entity.update();
-
-      if (entity instanceof Entity) {
-        const { x: entityX, y: entityY } = entity.position;
-        for (const { body, position } of entity.sensors) {
-          Body.setPosition(body, {
-            x: entityX + position.x,
-            y: entityY + position.y,
-          });
-        }
-      }
     });
   }
 

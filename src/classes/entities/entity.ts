@@ -35,7 +35,7 @@ type TimerOptions = {
 
 type AddSensorParams = {
   name?: string;
-  position?: Point;
+  relativePosition?: Point;
 } & (
   | {
       shape?: "rect";
@@ -211,20 +211,31 @@ export abstract class Entity<
    * @void
    */
   addSensor(
-    { position, name, shape = "rect", width, height, radius }: AddSensorParams,
+    {
+      relativePosition,
+      name,
+      shape = "rect",
+      width,
+      height,
+      radius,
+    }: AddSensorParams,
     debug: boolean = false,
     debugColor?: Color
   ) {
     name = name || genId();
+    relativePosition = relativePosition || { x: 0, y: 0 };
 
-    const pos = { ...this.position };
+    const pos = {
+      x: this.position.x + relativePosition.x,
+      y: this.position.y + relativePosition.y,
+    };
 
     let sensor: Sensor;
     if (shape === "rect") {
       sensor = new Sensor(
         this,
         name,
-        position || { x: 0, y: 0 },
+        relativePosition,
         { width, height },
         shape,
         Bodies.rectangle(pos.x, pos.y, width, height, {
@@ -237,7 +248,7 @@ export abstract class Entity<
       sensor = new Sensor(
         this,
         name,
-        position || { x: 0, y: 0 },
+        relativePosition,
         { width: radius * 2, height: radius * 2 },
         shape,
         Bodies.circle(pos.x, pos.y, radius, {

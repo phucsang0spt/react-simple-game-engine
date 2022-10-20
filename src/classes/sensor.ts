@@ -5,7 +5,7 @@ export class Sensor {
   constructor(
     public readonly entity: Entity,
     public readonly name: string,
-    public readonly position: Point,
+    public readonly relativePosition: Point,
     public readonly size: Size,
     public readonly shape: "rect" | "circle",
     public readonly body: SensorBody,
@@ -14,5 +14,9 @@ export class Sensor {
   ) {
     this.body.sensor = this;
     this.body.entity = this.entity;
+  }
+
+  get position() {
+    return this.body.position as Matter.Vector;
   }
 }
