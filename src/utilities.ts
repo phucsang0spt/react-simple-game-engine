@@ -7,5 +7,6 @@ export * from "./hooks/interact";
 export * from "./hooks/watcher";
 export * from "./hooks/entity";
 export * from "./hooks/scene";
+export * from "./hooks/comp";
 
 export { genId, isRealPhone, getPlatform } from "./utils";

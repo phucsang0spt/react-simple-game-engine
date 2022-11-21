@@ -15,7 +15,7 @@ import { Scaler } from "../classes/scaler";
 import { getClassName, useWindowSize } from "../utils";
 import { LayoutMode } from "../export-enums";
 import { AssetsFailBehavior } from "../export-types";
-import { UISceneContext } from "../react-context";
+import { ScalerContext, UISceneContext } from "../react-context";
 
 import { ScalerContainer } from "./scaler-container";
 import { Sketch } from "./sketch";
@@ -174,14 +174,16 @@ export function SceneRunner({
           <>
             {isBootDone ? (
               <UISceneContext.Provider value={current}>
-                <current.UI scene={current} {...current.getUIProps()} />
-                {joystick && (
-                  <MovementControl {...(joystick === true ? {} : joystick)} />
-                )}
-                <div
-                  className={getClassName("scene-modal-stack")}
-                  id="scene-modal-stack"
-                />
+                <ScalerContext.Provider value={refScaler.current}>
+                  <current.UI scene={current} {...current.getUIProps()} />
+                  {joystick && (
+                    <MovementControl {...(joystick === true ? {} : joystick)} />
+                  )}
+                  <div
+                    className={getClassName("scene-modal-stack")}
+                    id="scene-modal-stack"
+                  />
+                </ScalerContext.Provider>
               </UISceneContext.Provider>
             ) : (
               <div>{/* //todo */}</div>
