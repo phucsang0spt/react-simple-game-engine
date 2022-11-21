@@ -245,21 +245,21 @@ export abstract class Scene<UIP = any> {
     };
   }
 
-  emitJoystickAction(data: JoystickAction) {
+  emitJoystickActionEvent(data: JoystickAction) {
     const listeners = this.joystickActionListeners;
     for (const listener of listeners) {
       listener(data);
     }
   }
 
-  emitProcessStateChangeListener(isForeground: boolean) {
+  emitProcessStateChangeEvent(isForeground: boolean) {
     const listeners = this.processStateChangeListeners;
     for (const listener of listeners) {
       listener(isForeground);
     }
   }
 
-  emitEntityPropsChange<V = any>(name: string, value: V) {
+  emitEntityPropsChangeEvent<V = any>(name: string, value: V) {
     const listeners = this.entityPropsChangeListeners[name] || [];
     for (const listener of listeners) {
       listener(value);
@@ -446,7 +446,7 @@ export abstract class Scene<UIP = any> {
   listenNativeEvents() {
     const _this = this;
     function onVisibilitychange() {
-      _this.emitProcessStateChangeListener(window.Renderer.isForeground);
+      _this.emitProcessStateChangeEvent(window.Renderer.isForeground);
     }
     window.document.addEventListener("visibilitychange", onVisibilitychange);
 

@@ -5,6 +5,7 @@ import { SimpleCamera } from "./simple-camera";
 
 type ItemWithPercent<I> = [I, number];
 type LastItem<I> = [I];
+type SizeChangeListener = (width: number, height: number) => void;
 
 export type Collection<I> = [...ItemWithPercent<I>[], LastItem<I>];
 
@@ -12,6 +13,7 @@ export class P5 extends p5 {
   running = true;
   scaler: Scaler;
   simpleCamera: SimpleCamera;
+  private readonly sizeChangeListeners: SizeChangeListener[] = [];
 
   constructor(sketch: (p5: P5) => void) {
     super(sketch);
@@ -39,6 +41,29 @@ export class P5 extends p5 {
 
   get isForeground() {
     return window.document.visibilityState === "visible";
+  }
+
+  private emitSizeChangeEvent() {
+    const listeners = this.sizeChangeListeners;
+    for (const listener of listeners) {
+      listener(this.width, this.height);
+    }
+  }
+
+  addSizeChangeListener(func: SizeChangeListener) {
+    const listeners = this.sizeChangeListeners;
+    listeners.push(func);
+    return () => {
+      const index = listeners.indexOf(func);
+      if (index > -1) {
+        listeners.splice(index, 1);
+      }
+    };
+  }
+
+  resizeCanvas(width: number, height: number) {
+    super.resizeCanvas(width, height);
+    this.emitSizeChangeEvent();
   }
 
   drawHandle(position: Point, onDraw: (p5: P5) => void) {

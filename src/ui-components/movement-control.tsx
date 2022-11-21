@@ -35,7 +35,7 @@ export function MovementControl({
   const el = useMemo(() => {
     const onAction = (e: IJoystickUpdateEvent) => {
       if (e.type === JoystickActionType.MOVE) {
-        scene.emitJoystickAction({
+        scene.emitJoystickActionEvent({
           type: e.type as JoystickActionType.MOVE,
           vector: Renderer.createVector(e.x, -e.y).normalize(), // -y reverse direction
           weight: e.distance / 100, // 0 -> 1
@@ -43,7 +43,7 @@ export function MovementControl({
           direction: e.direction as JoystickDirection,
         });
       } else {
-        scene.emitJoystickAction({
+        scene.emitJoystickActionEvent({
           type: e.type as JoystickActionType.START | JoystickActionType.STOP,
         });
       }

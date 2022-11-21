@@ -5,6 +5,7 @@ import { copyProperties } from "../utils";
 export class Scaler {
   private _value: number;
   private _screenSize: Size;
+
   constructor(
     private readonly _screenSizeUI: Size,
     private readonly _canvasSize: Size,
