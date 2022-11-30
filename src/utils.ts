@@ -21,7 +21,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 export async function createAssetImage(src: string): Promise<Avatar> {
   return new Promise((res: any, rej) => {
-    outOfScopeP5.loadImage(src, res, rej);
+    outOfScopeP5.loadImage(
+      src,
+      (p5Img: any) => {
+        p5Img.domImg = new Image();
+        p5Img.domImg.src = src;
+        res(p5Img);
+      },
+      rej
+    );
   });
 }
 

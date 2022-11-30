@@ -8,7 +8,9 @@ import { SoundType } from "./export-enums";
 
 export type { Collection } from "./classes/p5";
 
-export type Avatar = ReturnType<import("./classes/p5").P5["loadImage"]>;
+export type Avatar = ReturnType<import("./classes/p5").P5["loadImage"]> & {
+  domImg: HTMLImageElement;
+};
 export type Color = [number, number, number, number?];
 export type Point = { x: number; y: number };
 export type Offset = Point & { width: number; height: number };
