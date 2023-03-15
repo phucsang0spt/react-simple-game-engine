@@ -43,6 +43,14 @@ export class P5 extends p5 {
     return window.document.visibilityState === "visible";
   }
 
+  get mouseScreen() {
+    const { viewportDelta, value } = this.scaler;
+    return {
+      x: this.mouseX - viewportDelta.x * value,
+      y: this.mouseY - viewportDelta.y * value,
+    };
+  }
+
   private emitSizeChangeEvent() {
     const listeners = this.sizeChangeListeners;
     for (const listener of listeners) {

@@ -18,9 +18,9 @@ import { AssetsFailBehavior } from "../export-types";
 import { ScalerContext, UISceneContext } from "../react-context";
 
 import { ScalerContainer } from "./scaler-container";
-import { Sketch } from "./sketch";
 import { MovementControl, MovementControlProps } from "./movement-control";
 import { FloatContainer } from "./float-container";
+import { Sketch } from "./sketch";
 
 export type SceneRunnerPublicProps = {
   width: number;

@@ -72,6 +72,14 @@ export class Scaler {
     return _viewport;
   }
 
+  get viewportDelta() {
+    const { width, height } = this.viewport;
+    return {
+      x: (this._canvasSize.width - width) / 2,
+      y: (this._canvasSize.height - height) / 2,
+    };
+  }
+
   screenUnitToCanvasUnit(px: number) {
     return px / this._value;
   }
