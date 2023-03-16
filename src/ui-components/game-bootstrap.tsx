@@ -109,7 +109,7 @@ export function GameBootstrap({ logPopup, scenes, ...props }: WorldViewProps) {
           {
               box-sizing: border-box;
               -webkit-touch-callout: none;
-              -webkit-tap-highlight-color: none;
+              -webkit-tap-highlight-color: rgba(0,0,0,0);
               -webkit-user-select: none;
               -ms-user-select: none;
               user-select: none;
