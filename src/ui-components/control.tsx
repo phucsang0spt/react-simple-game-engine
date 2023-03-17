@@ -1,4 +1,4 @@
-import { ReactNode, useMemo } from "react";
+import { ReactNode, useMemo, CSSProperties } from "react";
 import { useLongPress, UseLongPressProps } from "../hooks/interact";
 import { getClassName } from "../utils";
 
@@ -42,15 +42,18 @@ export function Control({
   return (
     <div
       className={getClassName("ui-control")}
-      style={{
-        top,
-        left,
-        right,
-        bottom,
-        flexDirection: orientation === "vertical" ? "column" : "row",
-        alignItems: alignment,
-        transform,
-      }}
+      data-set-top={top != null}
+      style={
+        {
+          "--top": top,
+          left,
+          right,
+          bottom,
+          flexDirection: orientation === "vertical" ? "column" : "row",
+          alignItems: alignment,
+          transform,
+        } as CSSProperties
+      }
       {...longPressProps}
     >
       {children}

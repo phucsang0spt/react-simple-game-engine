@@ -1,11 +1,17 @@
 import { ReactElement, useMemo } from "react";
+import { getClassName } from "../utils";
 
 type ControlContainerProps = {
   full?: boolean;
   children: ReactElement | ReactElement[];
+  stack?: boolean;
 };
 
-export function ControlContainer({ full, children }: ControlContainerProps) {
+export function ControlContainer({
+  stack = false,
+  full,
+  children,
+}: ControlContainerProps) {
   const _children = useMemo(() => {
     const _children = Array.isArray(children) ? children : [children];
     return _children
@@ -18,10 +24,10 @@ export function ControlContainer({ full, children }: ControlContainerProps) {
 
   return (
     <div
+      className={getClassName("control-container")}
+      data-stack={stack}
       style={{
-        width: "100%",
         height: full ? "100%" : undefined,
-        position: "relative",
       }}
     >
       {_children}

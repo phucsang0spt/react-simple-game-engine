@@ -48,6 +48,8 @@ export function GameBootstrap({ logPopup, scenes, ...props }: WorldViewProps) {
 
     const gameRootClass = getClassName("game-root");
     const gameLoggerClass = getClassName("game-logger");
+    const uiControlClass = getClassName("ui-control");
+    const controlContainerClass = getClassName("control-container");
     style.appendChild(
       document.createTextNode(`
           .${getClassName("assets-fail-view")}{
@@ -173,10 +175,30 @@ export function GameBootstrap({ logPopup, scenes, ...props }: WorldViewProps) {
             width: 100%;
             height: 100%;
           }
-
-          .${getClassName("ui-control")} {
+          
+          .${uiControlClass} {
             position: absolute;
             display: inline-flex;
+          }
+           
+          .${uiControlClass}[data-set-top="true"] {
+            top: calc(var(--top) * 1px);
+          }
+
+          .${controlContainerClass} {
+            width: 100%;
+            position: relative;
+          }
+
+          .${controlContainerClass}[data-stack="true"] .${uiControlClass} {
+            position: relative;
+            display: flex;
+          
+          }
+          
+          .${controlContainerClass}[data-stack="true"] .${uiControlClass}[data-set-top="true"] {
+            top: unset;
+            margin-top: calc(var(--top) * 1px);
           }
 
           .${getClassName("scaler-container")} {
