@@ -27,6 +27,7 @@ import {
 import { SoundType } from "../export-enums";
 import { SimpleCamera } from "./simple-camera";
 import { P5 } from "./p5";
+import { TouchEvent } from "../ui-components/movement-control";
 
 const MAX_ASSET_PARALLEL_LOAD = 4;
 
@@ -163,7 +164,13 @@ export abstract class Scene<UIP = any> {
     return {};
   }
 
-  getInitialData(): { joystick?: boolean } {
+  getInitialConfigs(): {
+    joystick?:
+      | boolean
+      | {
+          containerTouchEvent?: TouchEvent;
+        };
+  } {
     return {};
   }
 
